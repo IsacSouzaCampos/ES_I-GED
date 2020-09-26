@@ -2,10 +2,32 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2ebf7468-2029-498b-807a-beeb04c82052" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/administrador.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/administrador.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/usuario.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/usuario.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/usuarioComum.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/usuarioComum.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/ES_I-GED.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/arquivo/.usuarios" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/uteis/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/uteis/administrador.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/uteis/login.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/uteis/usuarioComum.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Apresentação GED.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/aux/Apresentação GED.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dicionario_Terminologia_Arquivistica.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/aux/Dicionario_Terminologia_Arquivistica.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exercicio3 - modelagem conceitual.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/aux/exercicio3 - modelagem conceitual.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exercicio5 - modelo conceitual.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/aux/exercicio5 - modelo conceitual.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modelo_conceitual.drawio" beforeDir="false" afterPath="$PROJECT_DIR$/aux/modelo_conceitual.drawio" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/administrador.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/arquivo.py" beforeDir="false" afterPath="$PROJECT_DIR$/uteis/arquivo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/documento.py" beforeDir="false" afterPath="$PROJECT_DIR$/uteis/documento.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/processo.py" beforeDir="false" afterPath="$PROJECT_DIR$/uteis/processo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/secao.py" beforeDir="false" afterPath="$PROJECT_DIR$/uteis/estante.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/usuario.py" beforeDir="false" afterPath="$PROJECT_DIR$/uteis/usuario.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/usuarioComum.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +45,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1hvqXV2NCj7WLhGW9GzT0vNpwYf" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -31,7 +54,33 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/uteis" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.main (1)">
+    <configuration name="main (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ES_I-GED" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ES_I-GED" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -53,8 +102,31 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ES_I-GED" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/uteis/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.main (1)" />
+        <item itemvalue="Python.main (1)" />
         <item itemvalue="Python.main" />
       </list>
     </recent_temporary>
@@ -71,21 +143,25 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1343" height="154" key="GridCell.Tab.0.bottom" timestamp="1600968314757">
+    <state x="466" y="122" width="424" height="484" key="FileChooserDialogImpl" timestamp="1601058410177">
       <screen x="0" y="27" width="1366" height="676" />
     </state>
-    <state width="1343" height="154" key="GridCell.Tab.0.bottom/0.27.1366.676@0.27.1366.676" timestamp="1600968314757" />
-    <state width="1343" height="154" key="GridCell.Tab.0.center" timestamp="1600968314756">
+    <state x="466" y="122" width="424" height="484" key="FileChooserDialogImpl/0.27.1366.676@0.27.1366.676" timestamp="1601058410177" />
+    <state width="1343" height="154" key="GridCell.Tab.0.bottom" timestamp="1601079264768">
       <screen x="0" y="27" width="1366" height="676" />
     </state>
-    <state width="1343" height="154" key="GridCell.Tab.0.center/0.27.1366.676@0.27.1366.676" timestamp="1600968314756" />
-    <state width="1343" height="154" key="GridCell.Tab.0.left" timestamp="1600968314750">
+    <state width="1343" height="154" key="GridCell.Tab.0.bottom/0.27.1366.676@0.27.1366.676" timestamp="1601079264768" />
+    <state width="1343" height="154" key="GridCell.Tab.0.center" timestamp="1601079264767">
       <screen x="0" y="27" width="1366" height="676" />
     </state>
-    <state width="1343" height="154" key="GridCell.Tab.0.left/0.27.1366.676@0.27.1366.676" timestamp="1600968314750" />
-    <state width="1343" height="154" key="GridCell.Tab.0.right" timestamp="1600968314756">
+    <state width="1343" height="154" key="GridCell.Tab.0.center/0.27.1366.676@0.27.1366.676" timestamp="1601079264767" />
+    <state width="1343" height="154" key="GridCell.Tab.0.left" timestamp="1601079264766">
       <screen x="0" y="27" width="1366" height="676" />
     </state>
-    <state width="1343" height="154" key="GridCell.Tab.0.right/0.27.1366.676@0.27.1366.676" timestamp="1600968314756" />
+    <state width="1343" height="154" key="GridCell.Tab.0.left/0.27.1366.676@0.27.1366.676" timestamp="1601079264766" />
+    <state width="1343" height="154" key="GridCell.Tab.0.right" timestamp="1601079264768">
+      <screen x="0" y="27" width="1366" height="676" />
+    </state>
+    <state width="1343" height="154" key="GridCell.Tab.0.right/0.27.1366.676@0.27.1366.676" timestamp="1601079264768" />
   </component>
 </project>
