@@ -23,14 +23,20 @@ class LogIn:
                     elif opcao == 2:
                         return self.criar_conta()
                 except Exception as e:
-                    return e
+                    raise e
 
     @staticmethod
     def opcao_entrada():
         print('[1] Entrar')
         print('[2] Criar Conta')
         print('[0] Sair')
-        return int(input('Opcao: '))
+        opcao = int(input('Opcao: '))
+
+        if opcao > 0 and opcao < 3:
+            return opcao
+        elif opcao == 0:
+            raise Exception()
+        raise Exception('Opcao nao existente')
 
     @staticmethod
     def primeiro_acesso():
@@ -45,7 +51,7 @@ class LogIn:
 
         with open('data/.data', 'w') as fout:
             hashed = bcrypt.hashpw(senha, bcrypt.gensalt(rounds=15))
-            info_usuario = (nome, codigo_identificacao, hashed.decode())
+            info_usuario = f'{nome}:{codigo_identificacao}:{hashed.decode()}'
             print('usuario_comum:0;administrador:1', file=fout)
             print(info_usuario, file=fout)
 
@@ -68,19 +74,22 @@ class LogIn:
         nome = str(input('Nome do usuario: '))
         senha = getpass.getpass('Senha: ').encode()
 
-        with open('data/.data') as fout:
-            text = fout.readlines()
+        with open('data/.data', 'r') as fin:
+            text = fin.readlines()
             for v in text[0].split(';'):
                 if 'usuario_comum' in v:
                     n_usuarios_comuns = int(v.split(':')[1])+1
                     codigo_identificacao = 'C' + str(n_usuarios_comuns)
                 else:
-                    n_administradores = int(v.split(':')[1])+1
+                    n_administradores = int(v.split(':')[1])
             hashed = bcrypt.hashpw(senha, bcrypt.gensalt(rounds=15))
-            text[0] = f'usuario_comum:{n_usuarios_comuns};administrador:{n_administradores}'
-            info_usuario = (nome, codigo_identificacao, hashed.decode())
-            text.append(str(info_usuario))
+            text[0] = f'usuario_comum:{n_usuarios_comuns};administrador:{n_administradores}\n'
+            info_usuario = f'{nome}:{codigo_identificacao}:{hashed.decode()}'
+            text.append(info_usuario)
+
+        with open('data/.data', 'w') as fout:
             fout.writelines(text)
+
         return usuarioComum.UsuarioComum(nome, codigo_identificacao)
 
     @staticmethod
@@ -88,19 +97,22 @@ class LogIn:
         nome = str(input('Nome do usuario: '))
         senha = getpass.getpass('Senha: ').encode()
 
-        with open('data/.data') as fout:
-            text = fout.readlines()
+        with open('data/.data', 'r') as fin:
+            text = fin.readlines()
             for v in text[0].split(';'):
                 if 'usuario_comum' in v:
-                    n_usuarios_comuns = int(v.split(':')[1])+1
+                    n_usuarios_comuns = int(v.split(':')[1])
                 else:
                     n_administradores = int(v.split(':')[1])+1
                     codigo_identificacao = 'A' + str(n_administradores)
             hashed = bcrypt.hashpw(senha, bcrypt.gensalt(rounds=15))
-            text[0] = f'usuario_comum:{n_usuarios_comuns};administrador:{n_administradores}'
-            info_usuario = (nome, codigo_identificacao, hashed.decode())
-            text.append(str(info_usuario))
+            text[0] = f'usuario_comum:{n_usuarios_comuns};administrador:{n_administradores}\n'
+            info_usuario = f'{nome}:{codigo_identificacao}:{hashed.decode()}'
+            text.append(info_usuario)
+
+        with open('data/.data', 'w') as fout:
             fout.writelines(text)
+
         return administrador.Administrador(nome, codigo_identificacao)
 
     @staticmethod
