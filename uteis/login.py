@@ -19,7 +19,7 @@ class LogIn:
                     if opcao == 1:
                         nome = str(input('Nome de usuario: '))
                         senha = getpass.getpass('Senha: ').encode()
-                        return self.verificar_conta(nome, senha, usuarios)
+                        return self.verificar_hierarquia(nome, senha, usuarios)
                     elif opcao == 2:
                         return self.criar_conta()
                 except Exception as e:
@@ -52,8 +52,7 @@ class LogIn:
         with open('data/.data', 'w') as fout:
             hashed = bcrypt.hashpw(senha, bcrypt.gensalt(rounds=15))
             info_usuario = f'{nome}:{codigo_identificacao}:{hashed.decode()}'
-            print('usuario_comum:0;administrador:1', file=fout)
-            print(info_usuario, file=fout)
+            fout.write(f'usuario_comum:0;administrador:1\n{info_usuario}')
 
         return administrador.Administrador(nome, codigo_identificacao)
 
@@ -85,7 +84,7 @@ class LogIn:
             hashed = bcrypt.hashpw(senha, bcrypt.gensalt(rounds=15))
             text[0] = f'usuario_comum:{n_usuarios_comuns};administrador:{n_administradores}\n'
             info_usuario = f'{nome}:{codigo_identificacao}:{hashed.decode()}'
-            text.append(info_usuario)
+            text.append('\n' + info_usuario)
 
         with open('data/.data', 'w') as fout:
             fout.writelines(text)
@@ -108,7 +107,7 @@ class LogIn:
             hashed = bcrypt.hashpw(senha, bcrypt.gensalt(rounds=15))
             text[0] = f'usuario_comum:{n_usuarios_comuns};administrador:{n_administradores}\n'
             info_usuario = f'{nome}:{codigo_identificacao}:{hashed.decode()}'
-            text.append(info_usuario)
+            text.append('\n' + info_usuario)
 
         with open('data/.data', 'w') as fout:
             fout.writelines(text)
@@ -116,7 +115,7 @@ class LogIn:
         return administrador.Administrador(nome, codigo_identificacao)
 
     @staticmethod
-    def verificar_conta(nome, senha, usuarios):
+    def verificar_hierarquia(nome, senha, usuarios):
         for line in usuarios.splitlines():
             try:
                 line_vec = line.split(':')

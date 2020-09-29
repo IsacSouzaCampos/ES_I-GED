@@ -1,4 +1,4 @@
-from uteis import login, arquivo
+from uteis import login, arquivo, estante, documento
 
 
 def main():
@@ -13,11 +13,11 @@ def main():
     while opcao != 0:
         opcao = mostrar_interface(interface)
         if opcao == 1:
-            print('ADICIONAR DOCUMENTO')
+            documento.Documento().adicionar_documento()
         elif opcao == 2:
-            print('ANEXAR DOCUMENTO A PROCESSO')
+            print('ANEXAR DOCUMENTO')
         elif opcao == 3:
-            arquivo.Arquivo().adicionar_estante()
+            estante.Estante().adicionar_estante()
         elif opcao == 4:
             print('PESQUISAR')
 
