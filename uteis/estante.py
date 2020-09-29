@@ -7,8 +7,7 @@ class Estante:
     def __init__(self, codigo=None):
         self.codigo = codigo
 
-    @staticmethod
-    def adicionar_estante():
+    def adicionar_estante(self):
         codigo = str(input('Codigo da estante: '))
         nome = str(input('Autorizacao do administrador\nUsuario: '))
         senha = getpass.getpass('Senha: ').encode()
@@ -19,12 +18,16 @@ class Estante:
             except Exception as e:
                 return print(e)
             if hierarquia == 'A':
-                if not os.path.exists(f'data/arquivo/{codigo}'):
+                if not self.existe_estante(codigo):
                     os.system(f'mkdir data/arquivo/{codigo}')
                 else:
-                    print('Estante ja existente')
+                    raise Exception('Estante ja existente')
             else:
                 print('Conta de administrador incorreta')
+
+    @staticmethod
+    def existe_estante(codigo):
+        return os.path.exists(f'data/arquivo/{codigo}')
 
     def get_codigo(self):
         return self.codigo

@@ -1,3 +1,7 @@
+from uteis import estante
+import os
+
+
 class Documento:
     def __init__(self, numero_protocolo=None, assunto=None, partes_interessadas=None):
         self.numero_protocolo = numero_protocolo
@@ -27,6 +31,27 @@ class Documento:
             raise Exception('Nao foi possivel adicionar o documento')
 
         print('Finalizado')
+
+    @staticmethod
+    def listar_documentos():
+        codigo_estante = str(input('Codigo da estante: '))
+        codigo_caixa = str(input('Codigo da caixa: '))
+        if not estante.Estante().existe_estante(codigo_estante):
+            raise Exception('Estante nao existente')
+        if codigo_caixa not in os.listdir(f'data/arquivo/{codigo_estante}'):
+            raise Exception('Caixa nao existente')
+
+        print('*'*20)
+        print(f'Documentos [Estante: {codigo_estante}; Caixa: {codigo_caixa}]')
+        with open(f'data/arquivo/{codigo_estante}/{codigo_caixa}', 'r') as fin:
+            for line in fin.readlines():
+                infos = line.split(':')
+                print('*'*20)
+                print(f'Assunto: {infos[0]}')
+                partes_interessadas = infos[1].replace('[', '').replace(']', '').replace('\'', '').replace('_', ' ')\
+                    .split(',')
+                print('Partes Interessadas: ' + ','.join(partes_interessadas))
+                print(f'Protocolo: {infos[2]}')
 
     def get_numero_protocolo(self):
         return self.numero_protocolo
