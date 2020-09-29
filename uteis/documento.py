@@ -1,5 +1,5 @@
 class Documento:
-    def __init__(self, numero_protocolo=None, assunto=None, partes_interessadas=[]):
+    def __init__(self, numero_protocolo=None, assunto=None, partes_interessadas=None):
         self.numero_protocolo = numero_protocolo
         self.assunto = assunto
         self.partes_interessadas = partes_interessadas
@@ -23,7 +23,7 @@ class Documento:
             dados_documentos.append(f'{assunto}:{partes_interessadas}:{numero_protocolo}\n')
             with open(f'data/arquivo/{codigo_estante}/{codigo_caixa}', 'w') as fout:
                 fout.writelines(dados_documentos)
-        except Exception as e:
+        except Exception:
             raise Exception('Nao foi possivel adicionar o documento')
 
         print('Finalizado')

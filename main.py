@@ -1,9 +1,9 @@
-from uteis import login, arquivo, estante, documento
+from uteis import login, estante, documento
 
 
 def main():
     try:
-        usuario_atual = login.LogIn().login()
+        login.LogIn().login()
     except Exception as e:
         print(e)
         return

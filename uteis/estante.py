@@ -1,4 +1,5 @@
 from uteis import login
+import os
 import getpass
 
 
@@ -6,7 +7,8 @@ class Estante:
     def __init__(self, codigo=None):
         self.codigo = codigo
 
-    def adicionar_estante(self):
+    @staticmethod
+    def adicionar_estante():
         codigo = str(input('Codigo da estante: '))
         nome = str(input('Autorizacao do administrador\nUsuario: '))
         senha = getpass.getpass('Senha: ').encode()

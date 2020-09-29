@@ -3,12 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="2ebf7468-2029-498b-807a-beeb04c82052" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/.data" beforeDir="false" afterPath="$PROJECT_DIR$/data/.data" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/uteis/arquivo.py" beforeDir="false" afterPath="$PROJECT_DIR$/uteis/arquivo.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/uteis/documento.py" beforeDir="false" afterPath="$PROJECT_DIR$/uteis/documento.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/uteis/estante.py" beforeDir="false" afterPath="$PROJECT_DIR$/uteis/estante.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/uteis/login.py" beforeDir="false" afterPath="$PROJECT_DIR$/uteis/login.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,7 +83,6 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.main" />
-        <item itemvalue="Python.main (1)" />
       </list>
     </recent_temporary>
   </component>
@@ -110,22 +106,22 @@
       <screen x="0" y="27" width="1366" height="676" />
     </state>
     <state x="466" y="122" width="424" height="484" key="FileChooserDialogImpl/0.27.1366.676@0.27.1366.676" timestamp="1601058410177" />
-    <state width="1343" height="180" key="GridCell.Tab.0.bottom" timestamp="1601342148752">
+    <state width="1343" height="142" key="GridCell.Tab.0.bottom" timestamp="1601342983559">
       <screen x="0" y="27" width="1366" height="676" />
     </state>
-    <state width="1343" height="180" key="GridCell.Tab.0.bottom/0.27.1366.676@0.27.1366.676" timestamp="1601342148752" />
-    <state width="1343" height="180" key="GridCell.Tab.0.center" timestamp="1601342148751">
+    <state width="1343" height="142" key="GridCell.Tab.0.bottom/0.27.1366.676@0.27.1366.676" timestamp="1601342983559" />
+    <state width="1343" height="142" key="GridCell.Tab.0.center" timestamp="1601342983557">
       <screen x="0" y="27" width="1366" height="676" />
     </state>
-    <state width="1343" height="180" key="GridCell.Tab.0.center/0.27.1366.676@0.27.1366.676" timestamp="1601342148751" />
-    <state width="1343" height="180" key="GridCell.Tab.0.left" timestamp="1601342148750">
+    <state width="1343" height="142" key="GridCell.Tab.0.center/0.27.1366.676@0.27.1366.676" timestamp="1601342983557" />
+    <state width="1343" height="142" key="GridCell.Tab.0.left" timestamp="1601342983556">
       <screen x="0" y="27" width="1366" height="676" />
     </state>
-    <state width="1343" height="180" key="GridCell.Tab.0.left/0.27.1366.676@0.27.1366.676" timestamp="1601342148750" />
-    <state width="1343" height="180" key="GridCell.Tab.0.right" timestamp="1601342148751">
+    <state width="1343" height="142" key="GridCell.Tab.0.left/0.27.1366.676@0.27.1366.676" timestamp="1601342983556" />
+    <state width="1343" height="142" key="GridCell.Tab.0.right" timestamp="1601342983558">
       <screen x="0" y="27" width="1366" height="676" />
     </state>
-    <state width="1343" height="180" key="GridCell.Tab.0.right/0.27.1366.676@0.27.1366.676" timestamp="1601342148751" />
+    <state width="1343" height="142" key="GridCell.Tab.0.right/0.27.1366.676@0.27.1366.676" timestamp="1601342983558" />
     <state x="374" y="74" width="618" height="580" key="find.popup" timestamp="1601337548903">
       <screen x="0" y="27" width="1366" height="676" />
     </state>
