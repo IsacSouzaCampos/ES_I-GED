@@ -2,9 +2,7 @@ import getpass
 import bcrypt
 from builtins import staticmethod
 
-from reportlab.graphics.barcode import createBarcodeImageInMemory
-
-from uteis import administrador, usuarioComum
+from Model import administrador, usuarioComum
 
 
 class LogIn:

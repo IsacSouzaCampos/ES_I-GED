@@ -1,7 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="2ebf7468-2029-498b-807a-beeb04c82052" name="Default Changelist" comment="" />
+    <list default="true" id="2ebf7468-2029-498b-807a-beeb04c82052" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Model/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/View/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/View/documento.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/View/estante.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/View/usuario.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/ES_I-GED.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ES_I-GED.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uteis/administrador.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/administrador.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uteis/arquivo.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/arquivo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uteis/documento.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/documento.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uteis/estante.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/estante.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uteis/login.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/login.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uteis/processo.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/processo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uteis/usuario.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/usuario.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uteis/usuarioComum.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/usuarioComum.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -29,6 +65,8 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Users\José Felipe\PycharmProjects\trabalho_es\Model" />
+      <recent name="D:\Users\José Felipe\PycharmProjects\trabalho_es\View" />
       <recent name="$PROJECT_DIR$/uteis" />
     </key>
   </component>
@@ -92,6 +130,18 @@
     </task>
     <servers />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
   <component name="WindowStateProjectService">
     <state x="141" y="27" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1601330317203">
       <screen x="0" y="27" width="1366" height="676" />
@@ -101,22 +151,34 @@
       <screen x="0" y="27" width="1366" height="676" />
     </state>
     <state x="466" y="122" width="424" height="484" key="FileChooserDialogImpl/0.27.1366.676@0.27.1366.676" timestamp="1601058410177" />
-    <state width="1343" height="142" key="GridCell.Tab.0.bottom" timestamp="1601400968151">
-      <screen x="0" y="27" width="1366" height="676" />
+    <state width="757" height="210" key="GridCell.Tab.0.bottom" timestamp="1601762007517">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="757" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1601762007517" />
     <state width="1343" height="142" key="GridCell.Tab.0.bottom/0.27.1366.676@0.27.1366.676" timestamp="1601400968151" />
-    <state width="1343" height="142" key="GridCell.Tab.0.center" timestamp="1601400968148">
-      <screen x="0" y="27" width="1366" height="676" />
+    <state width="757" height="210" key="GridCell.Tab.0.center" timestamp="1601762007517">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="757" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1601762007517" />
     <state width="1343" height="142" key="GridCell.Tab.0.center/0.27.1366.676@0.27.1366.676" timestamp="1601400968148" />
-    <state width="1343" height="142" key="GridCell.Tab.0.left" timestamp="1601400968147">
-      <screen x="0" y="27" width="1366" height="676" />
+    <state width="757" height="210" key="GridCell.Tab.0.left" timestamp="1601762007517">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="757" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1601762007517" />
     <state width="1343" height="142" key="GridCell.Tab.0.left/0.27.1366.676@0.27.1366.676" timestamp="1601400968147" />
-    <state width="1343" height="142" key="GridCell.Tab.0.right" timestamp="1601400968150">
-      <screen x="0" y="27" width="1366" height="676" />
+    <state width="757" height="210" key="GridCell.Tab.0.right" timestamp="1601762007517">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="757" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1601762007517" />
     <state width="1343" height="142" key="GridCell.Tab.0.right/0.27.1366.676@0.27.1366.676" timestamp="1601400968150" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1601761916908">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1601761916908" />
+    <state x="586" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1601755373362">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="586" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1601755373362" />
     <state x="374" y="74" width="618" height="580" key="find.popup" timestamp="1601337548903">
       <screen x="0" y="27" width="1366" height="676" />
     </state>

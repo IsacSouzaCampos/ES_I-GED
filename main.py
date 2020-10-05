@@ -1,4 +1,5 @@
-from uteis import login, estante, documento
+from Model import estante, documento
+from View import login
 
 
 def main():
