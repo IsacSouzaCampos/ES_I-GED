@@ -3,10 +3,8 @@ from Model import estante
 import os
 import getpass
 
-class Estante:
-    def __init__(self, codigo=None):
-        self.codigo = codigo
 
+class Estante:
     def adicionar_estante(self):
         codigo = str(input('Codigo da estante: '))
         nome = str(input('Autorizacao do administrador\nUsuario: '))
@@ -18,7 +16,7 @@ class Estante:
             except Exception as e:
                 return print(e)
             if hierarquia == 'A':
-                if not self.existe_estante(codigo):
+                if not estante.Estante().existe_estante(codigo):
                     os.system(f'mkdir data/arquivo/{codigo}')
                 else:
                     raise Exception('Estante ja existente')

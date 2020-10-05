@@ -1,9 +1,10 @@
-from View import login
 import os
-import getpass
 
 
 class Estante:
+    def __init__(self, codigo=None):
+        self.codigo = codigo
+
     @staticmethod
     def existe_estante(codigo):
         return os.path.exists(f'data/arquivo/{codigo}')

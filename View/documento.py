@@ -1,13 +1,8 @@
-from Model import documento, estante
+from Model import estante, documento
 import os
 
 
 class Documento:
-    def __init__(self, numero_protocolo=None, assunto=None, partes_interessadas=None):
-        self.numero_protocolo = numero_protocolo
-        self.assunto = assunto
-        self.partes_interessadas = partes_interessadas
-
     @staticmethod
     def adicionar_documento():
         print('='*20)
@@ -31,6 +26,26 @@ class Documento:
             raise Exception('Nao foi possivel adicionar o documento')
 
         print('Finalizado')
+
+    @staticmethod
+    def anexar():
+        print('*'*20)
+        print('\nDADOS DO DOCUMENTO')
+        protocolo_documento = str(input('Protocolo: '))
+        estante_documento = str(input('Estante: '))
+        caixa_documento = str(input('Caixa: '))
+
+        print('\nDADOS DO PROCESSO')
+        protocolo_processo = str(input('Protocolo: '))
+        estante_processo = str(input('Estante: '))
+        caixa_processo = str(input('Caixa: '))
+
+        dados_documento = (protocolo_documento, estante_documento, caixa_documento)
+        dados_processo = (protocolo_processo, estante_processo, caixa_processo)
+        try:
+            documento.Documento().anexar(dados_documento, dados_processo)
+        except Exception as e:
+            print(e)
 
     @staticmethod
     def listar_documentos():

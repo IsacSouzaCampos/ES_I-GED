@@ -30,7 +30,7 @@ class LogIn:
         print('[0] Sair')
         opcao = int(input('Opcao: '))
 
-        if opcao > 0 and opcao < 3:
+        if 0 < opcao < 3:
             return opcao
         elif opcao == 0:
             raise Exception()
@@ -48,7 +48,7 @@ class LogIn:
         codigo_identificacao = 'A0'
 
         with open('data/.data', 'w') as fout:
-            hashed = bcrypt.hashpw(senha, bcrypt.gensalt(rounds=15))
+            hashed = bcrypt.hashpw(senha, bcrypt.gensalt())
             info_usuario = f'{nome}:{codigo_identificacao}:{hashed.decode()}'
             fout.write(f'usuario_comum:0;administrador:1\n{info_usuario}')
 
@@ -79,7 +79,7 @@ class LogIn:
                     codigo_identificacao = 'C' + str(n_usuarios_comuns)
                 else:
                     n_administradores = int(v.split(':')[1])
-            hashed = bcrypt.hashpw(senha, bcrypt.gensalt(rounds=15))
+            hashed = bcrypt.hashpw(senha, bcrypt.gensalt())
             text[0] = f'usuario_comum:{n_usuarios_comuns};administrador:{n_administradores}\n'
             info_usuario = f'{nome}:{codigo_identificacao}:{hashed.decode()}'
             text.append('\n' + info_usuario)

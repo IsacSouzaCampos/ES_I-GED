@@ -1,7 +1,7 @@
-import getpass
-
-
 class Usuario:
+    def __init__(self, nome, codigo_identificacao):
+        self.nome = nome
+        self.codigo_identificacao = codigo_identificacao
 
     def get_nome(self):
         return self.nome
