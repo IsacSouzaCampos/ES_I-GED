@@ -67,3 +67,27 @@ class Documento:
                     .split(',')
                 print('Partes Interessadas: ' + ','.join(partes_interessadas))
                 print(f'Protocolo: {infos[2]}')
+
+    @staticmethod
+    def pesquisar():
+        print('*'*20)
+        print('PESQUISAR POR:')
+        print('[1] Assunto')
+        print('[2] Partes Interessadas')
+        print('[3] Protocolo')
+        opcao = int(input('Opcao: '))
+
+        if opcao == 1:
+            estante, caixa = documento.Documento().pesquisar(opcao - 1, str(input('Assunto: ')))
+        elif opcao == 2:
+            estante, caixa = documento.Documento().pesquisar(opcao - 1, str(input('Partes Interessadas: ')))
+        elif opcao == 3:
+            estante, caixa = documento.Documento().pesquisar(opcao - 1, str(input('Protocolo: ')))
+        elif opcao == 0:
+            return
+        else:
+            raise Exception('Opcao nao existente')
+
+        print('*'*20)
+        print(f'Estante: {estante}  -   Caixa: {caixa}')
+        print('*' * 20)

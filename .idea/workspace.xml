@@ -20,21 +20,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2ebf7468-2029-498b-807a-beeb04c82052" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/View/caixa.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/administrador.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/administrador.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Model/documento.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/documento.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/estante.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/estante.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/usuario.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/usuario.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/usuarioComum.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/usuarioComum.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/View/documento.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/documento.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/estante.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/estante.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/login.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/login.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/.data" beforeDir="false" afterPath="$PROJECT_DIR$/data/.data" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/arquivo/A/0" beforeDir="false" afterPath="$PROJECT_DIR$/data/arquivo/A/0" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/arquivo/A/1" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/uteis/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/caixa.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

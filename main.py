@@ -24,7 +24,7 @@ def main():
             elif opcao == 5:
                 documento.Documento().listar_documentos()
             elif opcao == 6:
-                print('PESQUISAR')
+                documento.Documento().pesquisar()
         except Exception as e:
             print(e)
 
@@ -37,7 +37,7 @@ def mostrar_interface(interface):
         print('[3] Anexar documento a processo')
         print('[4] Adicionar estante ao arquivo')
         print('[5] Listar documentos de uma caixa')
-        print('[6] Pesquisar')
+        print('[6] Pesquisar documento')
         print('[0] Sair')
         return int(input('Opcao: '))
 

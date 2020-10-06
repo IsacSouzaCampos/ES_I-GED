@@ -1,3 +1,6 @@
+import os
+
+
 class Documento:
     def __init__(self, numero_protocolo=None, assunto=None, partes_interessadas=None):
         self.numero_protocolo = numero_protocolo
@@ -20,6 +23,26 @@ class Documento:
                 fout2.writelines(documentos)
         except Exception as e:
             raise e
+
+    @staticmethod
+    def pesquisar(i, valor_pesquisado):
+        path = 'data/arquivo/'
+        dirs = [(path + d) for d in os.listdir(path) if os.path.isdir(path + d)]
+
+        file = []
+        for d in dirs:
+            for f in os.listdir(d):
+                if os.path.isfile(d + '/' + f):
+                    file.append(d + '/' + f)
+
+        for f in file:
+            with open(f, 'r') as fin:
+                for line in fin.readlines():
+                    if valor_pesquisado in line.split(':')[i].replace('\n', ''):
+                        vec = f.split('/')
+                        return vec[-2], vec[-1]
+
+        raise Exception('Documento nao encontrado')
 
     def get_numero_protocolo(self):
         return self.numero_protocolo
