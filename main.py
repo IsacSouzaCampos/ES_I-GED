@@ -3,7 +3,7 @@ from View import login, caixa, documento, estante
 
 def main():
     try:
-        login.LogIn().login()
+        usuario_atual = login.LogIn().login()
     except Exception as e:
         print(e)
         return
@@ -14,15 +14,15 @@ def main():
         opcao = mostrar_interface(interface)
         try:
             if opcao == 1:
-                documento.Documento().adicionar_documento()
+                documento.Documento().adicionar()
             elif opcao == 2:
-                caixa.Caixa().adicionar_caixa()
+                caixa.Caixa().adicionar()
             elif opcao == 3:
                 documento.Documento().anexar()
             elif opcao == 4:
-                estante.Estante().adicionar_estante()
+                estante.Estante().adicionar(usuario_atual)
             elif opcao == 5:
-                documento.Documento().listar_documentos()
+                documento.Documento().listar()
             elif opcao == 6:
                 documento.Documento().pesquisar()
         except Exception as e:

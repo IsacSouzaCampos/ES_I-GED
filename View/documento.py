@@ -4,7 +4,7 @@ import os
 
 class Documento:
     @staticmethod
-    def adicionar_documento():
+    def adicionar():
         print('='*20)
         assunto = str(input('Assunto: '))
         partes_interessadas_temp = str(input('Partes Interessadas (ex.: nome1 sobrenome1, nome2 sobrenome2): '))
@@ -17,15 +17,9 @@ class Documento:
         for p in partes_interessadas_temp:
             partes_interessadas.append(p.strip().replace(' ', '_'))
         try:
-            with open(f'data/arquivo/{codigo_estante}/{codigo_caixa}', 'r') as fin:
-                dados_documentos = fin.readlines()
-            dados_documentos.append(f'{assunto}:{partes_interessadas}:{numero_protocolo}\n')
-            with open(f'data/arquivo/{codigo_estante}/{codigo_caixa}', 'w') as fout:
-                fout.writelines(dados_documentos)
-        except Exception:
-            raise Exception('Nao foi possivel adicionar o documento')
-
-        print('Finalizado')
+            documento.Documento(assunto, partes_interessadas, numero_protocolo).adicionar(codigo_estante, codigo_caixa)
+        except Exception as e:
+            raise e
 
     @staticmethod
     def anexar():
@@ -48,7 +42,7 @@ class Documento:
             print(e)
 
     @staticmethod
-    def listar_documentos():
+    def listar():
         codigo_estante = str(input('Codigo da estante: '))
         codigo_caixa = str(input('Codigo da caixa: '))
         if not estante.Estante().existe_estante(codigo_estante):

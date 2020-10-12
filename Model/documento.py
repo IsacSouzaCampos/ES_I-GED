@@ -2,10 +2,23 @@ import os
 
 
 class Documento:
-    def __init__(self, numero_protocolo=None, assunto=None, partes_interessadas=None):
-        self.numero_protocolo = numero_protocolo
+    def __init__(self, assunto=None, partes_interessadas=None, numero_protocolo=None):
         self.assunto = assunto
         self.partes_interessadas = partes_interessadas
+        self.numero_protocolo = numero_protocolo
+
+    def adicionar(self, codigo_estante, codigo_caixa):
+        try:
+            with open(f'data/arquivo/{codigo_estante}/{codigo_caixa}', 'r') as fin:
+                dados_documentos = fin.readlines()
+            dados_documentos.append(f'{self.get_assunto()}:{self.get_partes_interessadas()}:'
+                                    f'{self.get_numero_protocolo()}\n')
+            with open(f'data/arquivo/{codigo_estante}/{codigo_caixa}', 'w') as fout:
+                fout.writelines(dados_documentos)
+        except Exception:
+            raise Exception('Nao foi possivel adicionar o documento')
+
+        print('Finalizado')
 
     @staticmethod
     def anexar(dados_documento, dados_processo):
