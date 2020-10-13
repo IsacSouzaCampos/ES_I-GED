@@ -1,15 +1,10 @@
-from Model import documento, estante
+from Model import estante, documento
 import os
 
 
 class Documento:
-    def __init__(self, numero_protocolo=None, assunto=None, partes_interessadas=None):
-        self.numero_protocolo = numero_protocolo
-        self.assunto = assunto
-        self.partes_interessadas = partes_interessadas
-
     @staticmethod
-    def adicionar_documento():
+    def adicionar():
         print('='*20)
         assunto = str(input('Assunto: '))
         partes_interessadas_temp = str(input('Partes Interessadas (ex.: nome1 sobrenome1, nome2 sobrenome2): '))
@@ -22,18 +17,32 @@ class Documento:
         for p in partes_interessadas_temp:
             partes_interessadas.append(p.strip().replace(' ', '_'))
         try:
-            with open(f'data/arquivo/{codigo_estante}/{codigo_caixa}', 'r') as fin:
-                dados_documentos = fin.readlines()
-            dados_documentos.append(f'{assunto}:{partes_interessadas}:{numero_protocolo}\n')
-            with open(f'data/arquivo/{codigo_estante}/{codigo_caixa}', 'w') as fout:
-                fout.writelines(dados_documentos)
-        except Exception:
-            raise Exception('Nao foi possivel adicionar o documento')
-
-        print('Finalizado')
+            documento.Documento(assunto, partes_interessadas, numero_protocolo).adicionar(codigo_estante, codigo_caixa)
+        except Exception as e:
+            raise e
 
     @staticmethod
-    def listar_documentos():
+    def anexar():
+        print('*'*20)
+        print('\nDADOS DO DOCUMENTO')
+        protocolo_documento = str(input('Protocolo: '))
+        estante_documento = str(input('Estante: '))
+        caixa_documento = str(input('Caixa: '))
+
+        print('\nDADOS DO PROCESSO')
+        protocolo_processo = str(input('Protocolo: '))
+        estante_processo = str(input('Estante: '))
+        caixa_processo = str(input('Caixa: '))
+
+        dados_documento = (protocolo_documento, estante_documento, caixa_documento)
+        dados_processo = (protocolo_processo, estante_processo, caixa_processo)
+        try:
+            documento.Documento().anexar(dados_documento, dados_processo)
+        except Exception as e:
+            print(e)
+
+    @staticmethod
+    def listar():
         codigo_estante = str(input('Codigo da estante: '))
         codigo_caixa = str(input('Codigo da caixa: '))
         if not estante.Estante().existe_estante(codigo_estante):
@@ -52,3 +61,27 @@ class Documento:
                     .split(',')
                 print('Partes Interessadas: ' + ','.join(partes_interessadas))
                 print(f'Protocolo: {infos[2]}')
+
+    @staticmethod
+    def pesquisar():
+        print('*'*20)
+        print('PESQUISAR POR:')
+        print('[1] Assunto')
+        print('[2] Partes Interessadas')
+        print('[3] Protocolo')
+        opcao = int(input('Opcao: '))
+
+        if opcao == 1:
+            estante, caixa = documento.Documento().pesquisar(opcao - 1, str(input('Assunto: ')))
+        elif opcao == 2:
+            estante, caixa = documento.Documento().pesquisar(opcao - 1, str(input('Partes Interessadas: ')))
+        elif opcao == 3:
+            estante, caixa = documento.Documento().pesquisar(opcao - 1, str(input('Protocolo: ')))
+        elif opcao == 0:
+            return
+        else:
+            raise Exception('Opcao nao existente')
+
+        print('*'*20)
+        print(f'Estante: {estante}  -   Caixa: {caixa}')
+        print('*' * 20)

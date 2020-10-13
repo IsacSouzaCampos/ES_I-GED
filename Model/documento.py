@@ -1,6 +1,62 @@
-from Model import estante
 import os
+
+
 class Documento:
+    def __init__(self, assunto=None, partes_interessadas=None, numero_protocolo=None):
+        self.assunto = assunto
+        self.partes_interessadas = partes_interessadas
+        self.numero_protocolo = numero_protocolo
+
+    def adicionar(self, codigo_estante, codigo_caixa):
+        try:
+            with open(f'data/arquivo/{codigo_estante}/{codigo_caixa}', 'r') as fin:
+                dados_documentos = fin.readlines()
+            dados_documentos.append(f'{self.get_assunto()}:{self.get_partes_interessadas()}:'
+                                    f'{self.get_numero_protocolo()}\n')
+            with open(f'data/arquivo/{codigo_estante}/{codigo_caixa}', 'w') as fout:
+                fout.writelines(dados_documentos)
+        except Exception:
+            raise Exception('Nao foi possivel adicionar o documento')
+
+        print('Finalizado')
+
+    @staticmethod
+    def anexar(dados_documento, dados_processo):
+        # dados[0] = protocolo; dados[1] = estante; dados[2] = caixa;
+        try:
+            with open(f'data/arquivo/{dados_processo[1]}/{dados_processo[2]}', 'r') as fin1,\
+                    open(f'data/arquivo/{dados_documento[1]}/{dados_documento[2]}', 'r') as fin2:
+                processos = [(p.replace('\n', '') + f':{dados_documento[0]}\n')
+                             if p.split(':')[2].replace('\n', '') == dados_processo[0] else p for p in fin1.readlines()]
+                documentos = [d for d in fin2.readlines() if d.split(':')[2].replace('\n', '') != dados_documento[0]]
+
+            with open(f'data/arquivo/{dados_processo[1]}/{dados_processo[2]}', 'w') as fout1,\
+                    open(f'data/arquivo/{dados_documento[1]}/{dados_documento[2]}', 'w') as fout2:
+                fout1.writelines(processos)
+                fout2.writelines(documentos)
+        except Exception as e:
+            raise e
+
+    @staticmethod
+    def pesquisar(i, valor_pesquisado):
+        path = 'data/arquivo/'
+        dirs = [(path + d) for d in os.listdir(path) if os.path.isdir(path + d)]
+
+        file = []
+        for d in dirs:
+            for f in os.listdir(d):
+                if os.path.isfile(d + '/' + f):
+                    file.append(d + '/' + f)
+
+        for f in file:
+            with open(f, 'r') as fin:
+                for line in fin.readlines():
+                    if valor_pesquisado in line.split(':')[i].replace('\n', ''):
+                        vec = f.split('/')
+                        return vec[-2], vec[-1]
+
+        raise Exception('Documento nao encontrado')
+
     def get_numero_protocolo(self):
         return self.numero_protocolo
 
