@@ -45,7 +45,7 @@ class Documento:
     def listar():
         codigo_estante = str(input('Codigo da estante: '))
         codigo_caixa = str(input('Codigo da caixa: '))
-        if not estante.Estante().existe_estante(codigo_estante):
+        if not estante.Estante(codigo_estante).existe_estante():
             raise Exception('Estante nao existente')
         if codigo_caixa not in os.listdir(f'data/arquivo/{codigo_estante}'):
             raise Exception('Caixa nao existente')

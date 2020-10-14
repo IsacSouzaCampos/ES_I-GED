@@ -9,9 +9,8 @@ def main():
         return
 
     opcao = -1
-    interface = 'inicial'
     while opcao != 0:
-        opcao = mostrar_interface(interface)
+        opcao = mostrar_interface()
         try:
             if opcao == 1:
                 documento.Documento().adicionar()
@@ -29,17 +28,16 @@ def main():
             print(e)
 
 
-def mostrar_interface(interface):
-    if interface == 'inicial':
-        print('='*20)
-        print('[1] Adicionar documento')
-        print('[2] Adicionar caixa ao arquivo')
-        print('[3] Anexar documento a processo')
-        print('[4] Adicionar estante ao arquivo')
-        print('[5] Listar documentos de uma caixa')
-        print('[6] Pesquisar documento')
-        print('[0] Sair')
-        return int(input('Opcao: '))
+def mostrar_interface() -> int:
+    print('='*20)
+    print('[1] Adicionar documento')
+    print('[2] Adicionar caixa ao arquivo')
+    print('[3] Anexar documento a processo')
+    print('[4] Adicionar estante ao arquivo')
+    print('[5] Listar documentos de uma caixa')
+    print('[6] Pesquisar documento')
+    print('[0] Sair')
+    return int(input('Opcao: '))
 
 
 if __name__ == '__main__':

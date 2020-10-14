@@ -16,6 +16,7 @@ class Estante:
                 senha = getpass.getpass('Senha: ').encode()
 
                 with open('data/.data') as _usuarios:
+                    _usuarios.read()
                     usuario_autorizacao = login.LogIn().verificar_hierarquia(nome, senha, _usuarios.read())
                     if type(usuario_autorizacao) is administrador.Administrador:
                         if not est.existe_estante():
