@@ -1,5 +1,4 @@
 import getpass
-import bcrypt
 
 from Model import administrador, usuarioComum, usuario, login
 
