@@ -29,7 +29,7 @@ def main():
 
 
 def mostrar_interface() -> int:
-    print('='*20)
+    print('=' * 20)
     print('[1] Adicionar documento')
     print('[2] Adicionar caixa ao arquivo')
     print('[3] Anexar documento a processo')
