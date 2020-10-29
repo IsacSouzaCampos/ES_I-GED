@@ -5,14 +5,17 @@ import getpass
 
 
 class Estante:
-    def adicionar(self, usuario):
+    def adicionar(self, usuario: str):
+        """
+        Adiciona uma nova estante ao arquivo
+        :param usuario: usuario logado no momento da operação
+        """
         est = estante.Estante(str(input('Codigo da estante: ')))
-
         try:
             if type(usuario) is administrador.Administrador:
                 est.adicionar()
             else:
-                nome = str(input('Autorizacao do administrador\nUsuario: '))
+                nome = str(input('Autorizacao do administrador:\nUsuario: '))
                 senha = getpass.getpass('Senha: ').encode()
 
                 with open('data/.data') as _usuarios:

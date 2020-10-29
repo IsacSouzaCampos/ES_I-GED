@@ -1,6 +1,6 @@
 import getpass
 
-from Model import administrador, usuarioComum, usuario, login
+from Model import administrador, usuario_comum, usuario, login
 
 
 class LogIn:
@@ -9,21 +9,21 @@ class LogIn:
         Faz as verificações necessárias antes de inicializar o sistema
         :return: instância de Usuario referente ao usuário solicitante do LogIn
         """
-        with open('data/.data', 'r') as _usuarios:
-            usuarios = _usuarios.read()
-            if not usuarios:
-                return self.primeiro_acesso()
-            else:
-                try:
-                    opcao = self.opcao_entrada()
-                    if opcao == 1:
-                        nome = str(input('Nome de usuario: '))
-                        senha = getpass.getpass('Senha: ').encode()
-                        return login.LogIn().verificar_hierarquia(nome, senha, usuarios)
-                    elif opcao == 2:
-                        return self.criar_conta()
-                except Exception as e:
-                    raise e
+        while True:
+            with open('data/.data.csv', 'r') as _usuarios:
+                usuarios = _usuarios.read()
+                if not usuarios:
+                    return self.primeiro_acesso()
+            try:
+                opcao = self.opcao_entrada()
+                if opcao == 1:
+                    nome = str(input('Usuario: '))
+                    senha = getpass.getpass('Senha: ').encode()
+                    return login.LogIn().verificar_hierarquia(nome, senha)
+                elif opcao == 2:
+                    return self.criar_conta()
+            except Exception as e:
+                raise e
 
     @staticmethod
     def opcao_entrada() -> int:
@@ -49,11 +49,11 @@ class LogIn:
               ' registrado como administrador. As proximas contas a serem adicionadas\n'
               ' precisarao de autorizacao de um administrador ja existente\n'
               ' do sistema para serem efetuadas.')
-        nome = str(input('\nNome de usuario: '))
+        nome = str(input('\nUsuario: '))
         senha = getpass.getpass('Senha: ').encode()
-        codigo_identificacao = 'A0'
+        tipo_conta = 'administrador'
 
-        return login.LogIn().primeiro_acesso(nome, senha, codigo_identificacao)
+        return login.LogIn().primeiro_acesso(nome, senha, tipo_conta)
 
     def criar_conta(self) -> usuario.Usuario:
         """
@@ -67,15 +67,15 @@ class LogIn:
         return login.LogIn().criar_conta(opcao)
 
     @staticmethod
-    def criar_conta_comum() -> usuarioComum.UsuarioComum:
+    def criar_conta_comum() -> usuario_comum.UsuarioComum:
         """
         Cria uma nova conta comum
         :return: instancia de UsuarioComum
         """
-        nome = str(input('Nome do usuario: '))
+        nome = str(input('Usuario: '))
         senha = getpass.getpass('Senha: ').encode()
 
-        return login.LogIn().criar_conta_comum(nome, senha)
+        return login.LogIn().criar_conta_comum(nome, senha, 'conta_comum')
 
     @staticmethod
     def criar_conta_administrador() -> administrador.Administrador:
@@ -83,7 +83,8 @@ class LogIn:
         Cria uma nova conta de administrador
         :return: instancia de Administrador
         """
-        nome = str(input('Nome do usuario: '))
+        nome = str(input('Usuario: '))
         senha = getpass.getpass('Senha: ').encode()
 
-        return login.LogIn().criar_conta_administrador(nome, senha)
+
+        return login.LogIn().criar_conta_administrador(nome, senha, 'administrador')

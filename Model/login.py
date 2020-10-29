@@ -1,6 +1,8 @@
 import bcrypt
+import pandas as pd
+import getpass
 
-from Model import administrador, usuarioComum, usuario
+from Model import administrador, usuario_comum, usuario
 from View import login
 
 
@@ -14,21 +16,23 @@ class LogIn:
         if 0 < opcao < 3:
             return opcao
         elif opcao == 0:
-            raise Exception()
+            exit()
         raise Exception('Opcao nao existente')
 
     @staticmethod
-    def primeiro_acesso(nome: str, senha: bytes, codigo_identificacao: str) -> administrador.Administrador:
+    def primeiro_acesso(nome: str, senha: bytes, tipo_conta: str) -> administrador.Administrador:
         """
         Cria uma conta de administrador no caso de o sistema estar sendo iniciado pela primeira vez
         :return: instância de Administrador
         """
-        with open('data/.data', 'w') as fout:
-            hashed = bcrypt.hashpw(senha, bcrypt.gensalt())
-            info_usuario = f'{nome}:{codigo_identificacao}:{hashed.decode()}'
-            fout.write(f'usuario_comum:0;administrador:1\n{info_usuario}')
+        hashed = bcrypt.hashpw(senha, bcrypt.gensalt())
+        # creating data frame
+        df = pd.DataFrame({'Usuario': [nome],
+                           'Senha': [hashed.decode()],
+                           'Tipo da Conta': [tipo_conta]})
+        df.to_csv('data/.data.csv', index=False, encoding='utf-8')
 
-        return administrador.Administrador(nome, codigo_identificacao)
+        return administrador.Administrador(nome)
 
     def criar_conta(self, opcao: int) -> usuario.Usuario:
         """
@@ -42,74 +46,77 @@ class LogIn:
         else:
             raise Exception('Opcao nao existente')
 
-    @staticmethod
-    def criar_conta_comum(nome: str, senha: bytes) -> usuarioComum.UsuarioComum:
+    def criar_conta_comum(self, nome: str, senha: bytes, tipo_conta: str) -> usuario_comum.UsuarioComum:
         """
         Cria uma nova conta comum
         :return: instancia de UsuarioComum
         """
-        with open('data/.data', 'r') as fin:
-            text = fin.readlines()
-            for v in text[0].split(';'):
-                if 'usuario_comum' in v:
-                    n_usuarios_comuns = int(v.split(':')[1])+1
-                    codigo_identificacao = 'C' + str(n_usuarios_comuns)
-                else:
-                    n_administradores = int(v.split(':')[1])
-            hashed = bcrypt.hashpw(senha, bcrypt.gensalt())
-            text[0] = f'usuario_comum:{n_usuarios_comuns};administrador:{n_administradores}\n'
-            info_usuario = f'{nome}:{codigo_identificacao}:{hashed.decode()}'
-            text.append('\n' + info_usuario)
+        if self.existe_usuario(nome):
+            raise Exception('Nome de usuario já existente!')
 
-        with open('data/.data', 'w') as fout:
-            fout.writelines(text)
+        hashed = bcrypt.hashpw(senha, bcrypt.gensalt())
 
-        return usuarioComum.UsuarioComum(nome, codigo_identificacao)
+        df = pd.read_csv('data/.data.csv', encoding='utf-8')
+        df2 = pd.DataFrame({'Usuario': [nome],
+                            'Senha': [hashed.decode()],
+                            'Tipo da Conta': [tipo_conta]})
 
-    @staticmethod
-    def criar_conta_administrador(nome: str, senha: bytes) -> administrador.Administrador:
+        pd.concat([df, df2]).to_csv('data/.data.csv', index=False, encoding='utf-8')
+
+        return usuario_comum.UsuarioComum(nome)
+
+    def criar_conta_administrador(self, nome: str, senha: bytes, tipo_conta: str) -> administrador.Administrador:
         """
         Cria uma nova conta de administrador
         :return: instancia de Administrador
         """
-        with open('data/.data', 'r') as fin:
-            text = fin.readlines()
-            for v in text[0].split(';'):
-                if 'usuario_comum' in v:
-                    n_usuarios_comuns = int(v.split(':')[1])
-                else:
-                    n_administradores = int(v.split(':')[1])+1
-                    codigo_identificacao = 'A' + str(n_administradores)
-            hashed = bcrypt.hashpw(senha, bcrypt.gensalt())
-            text[0] = f'usuario_comum:{n_usuarios_comuns};administrador:{n_administradores}\n'
-            info_usuario = f'{nome}:{codigo_identificacao}:{hashed.decode()}'
-            text.append('\n' + info_usuario)
+        print('Autorização do Administrador:')
+        nome_admin = str(input('Usuario: '))
+        senha_admin = getpass.getpass('Senha: ').encode()
+        if type(self.verificar_hierarquia(nome_admin, senha_admin)) is not administrador.Administrador:
+            raise Exception('Informações de administrador incorretas!')
 
-        with open('data/.data', 'w') as fout:
-            fout.writelines(text)
+        hashed = bcrypt.hashpw(senha, bcrypt.gensalt())
 
-        return administrador.Administrador(nome, codigo_identificacao)
+        df = pd.read_csv('data/.data.csv', encoding='utf-8')
+        df2 = pd.DataFrame({'Usuario': [nome],
+                            'Senha': [hashed.decode()],
+                            'Tipo da Conta': [tipo_conta]})
+
+        pd.concat([df, df2]).to_csv('data/.data.csv', index=False, encoding='utf-8')
+
+        return administrador.Administrador(nome)
 
     @staticmethod
-    def verificar_hierarquia(nome: str, senha: str, usuarios: str) -> usuario.Usuario:
+    def verificar_hierarquia(nome: str, senha: bytes) -> usuario.Usuario:
         """
         Verifica se a conta do usuário passado como parâmetro é de um administrador ou comum.
         :param nome: nome do usuário a ser verificado
         :param senha: senha do usuário a ser verificado
-        :param usuarios: string do documento que possui registro de usuários do sistema
         :return: instância da subclasse de Usuario (Administrador / UsuarioComum) a qual os valores verificados
         pertencem
         :raise: Conta não existente ou senha incorreta
         """
-        for line in usuarios.splitlines():
-            try:
-                line_vec = line.split(':')
-                if line_vec[0] == nome:
-                    if bcrypt.checkpw(senha, line_vec[2].encode()):
-                        if line_vec[1][0] == 'A':
-                            return administrador.Administrador(nome, line_vec[1])
-                        elif line_vec[1][0] == 'C':
-                            return usuarioComum.UsuarioComum(nome, line_vec[1])
-            except:
-                continue
+        df = pd.read_csv('data/.data.csv', encoding='utf-8')
+
+        for index, row in df.iterrows():
+            if row['Usuario'] == nome and bcrypt.checkpw(senha, row['Senha'].encode()):
+                if row['Tipo da Conta'] == 'administrador':
+                    return administrador.Administrador(nome)
+                else:
+                    return usuario_comum.UsuarioComum(nome)
+
         raise Exception('Erro ao tentar logar')
+
+    @staticmethod
+    def existe_usuario(nome: str) -> bool:
+        """
+        Verifica existência do nome pesquisado na tabela de usuários
+        :param nome: Nome a ser pesquisado no dataframe
+        :return: bool
+        """
+        df = pd.read_csv('data/.data.csv', encoding='utf-8')
+        for index, row in df.iterrows():
+            if row['Usuario'] == nome:
+                return True
+        return False
