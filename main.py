@@ -1,7 +1,12 @@
 from View import login, caixa, documento, estante
+from Model import administrador
+import pandas as pd
 
 
 def main():
+    # df = pd.read_csv('data/arquivo/A/0.csv', encoding='utf-8')
+    # for index, row in df.iterrows():
+    #     print(row['Historico de Tramitacao'])
     try:
         usuario_atual = login.LogIn().login()
     except Exception as e:
@@ -9,14 +14,13 @@ def main():
         return
 
     opcao = -1
-    interface = 'inicial'
     while opcao != 0:
-        opcao = mostrar_interface(interface)
+        opcao = mostrar_interface()
         try:
             if opcao == 1:
                 documento.Documento().adicionar()
             elif opcao == 2:
-                caixa.Caixa().adicionar()
+                caixa.Caixa().adicionar(usuario_atual)
             elif opcao == 3:
                 documento.Documento().anexar()
             elif opcao == 4:
@@ -29,17 +33,16 @@ def main():
             print(e)
 
 
-def mostrar_interface(interface):
-    if interface == 'inicial':
-        print('='*20)
-        print('[1] Adicionar documento')
-        print('[2] Adicionar caixa ao arquivo')
-        print('[3] Anexar documento a processo')
-        print('[4] Adicionar estante ao arquivo')
-        print('[5] Listar documentos de uma caixa')
-        print('[6] Pesquisar documento')
-        print('[0] Sair')
-        return int(input('Opcao: '))
+def mostrar_interface() -> int:
+    print('=' * 20)
+    print('[1] Adicionar documento')
+    print('[2] Adicionar caixa ao arquivo')
+    print('[3] Anexar documentos')
+    print('[4] Adicionar estante ao arquivo')
+    print('[5] Listar documentos de uma caixa')
+    print('[6] Pesquisar documento')
+    print('[0] Sair')
+    return int(input('Opcao: '))
 
 
 if __name__ == '__main__':

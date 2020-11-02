@@ -1,128 +1,90 @@
 import getpass
-import bcrypt
-from builtins import staticmethod
 
-from Model import administrador, usuarioComum
+from Model import administrador, usuario_comum, usuario, login
 
 
 class LogIn:
-    def login(self):
-        with open('data/.data', 'r') as _usuarios:
-            usuarios = _usuarios.read()
-            if not usuarios:
-                return self.primeiro_acesso()
-            else:
-                try:
-                    opcao = self.opcao_entrada()
-                    if opcao == 1:
-                        nome = str(input('Nome de usuario: '))
-                        senha = getpass.getpass('Senha: ').encode()
-                        return self.verificar_hierarquia(nome, senha, usuarios)
-                    elif opcao == 2:
-                        return self.criar_conta()
-                except Exception as e:
-                    raise e
+    def login(self) -> usuario.Usuario:
+        """
+        Faz as verificações necessárias antes de inicializar o sistema
+        :return: instância de Usuario referente ao usuário solicitante do LogIn
+        """
+        while True:
+            with open('data/.data.csv', 'r') as _usuarios:
+                usuarios = _usuarios.read()
+                if not usuarios:
+                    return self.primeiro_acesso()
+            try:
+                opcao = self.opcao_entrada()
+                if opcao == 1:
+                    nome = str(input('Usuario: '))
+                    senha = getpass.getpass('Senha: ').encode()
+                    return login.LogIn().verificar_hierarquia(nome, senha)
+                elif opcao == 2:
+                    return self.criar_conta()
+            except Exception as e:
+                raise e
 
     @staticmethod
-    def opcao_entrada():
+    def opcao_entrada() -> int:
+        """
+        Verifica o que o usuário deseja fazer antes de inicializar o sistema
+        :return: inteiro referente à opção escolhida
+        """
         print('[1] Entrar')
         print('[2] Criar Conta')
         print('[0] Sair')
         opcao = int(input('Opcao: '))
 
-        if 0 < opcao < 3:
-            return opcao
-        elif opcao == 0:
-            raise Exception()
-        raise Exception('Opcao nao existente')
+        return login.LogIn().opcao_entrada(opcao)
 
     @staticmethod
-    def primeiro_acesso():
+    def primeiro_acesso() -> administrador.Administrador:
+        """
+        Cria uma conta de administrador no caso de o sistema estar sendo iniciado pela primeira vez
+        :return: instância de Administrador
+        """
         print('=====PRIMEIRO ACESSO=====')
         print('Por ser o primeiro acesso no sistema, voce sera automaticamente\n'
               ' registrado como administrador. As proximas contas a serem adicionadas\n'
               ' precisarao de autorizacao de um administrador ja existente\n'
               ' do sistema para serem efetuadas.')
-        nome = str(input('\nNome de usuario: '))
+        nome = str(input('\nUsuario: '))
         senha = getpass.getpass('Senha: ').encode()
-        codigo_identificacao = 'A0'
+        tipo_conta = 'administrador'
 
-        with open('data/.data', 'w') as fout:
-            hashed = bcrypt.hashpw(senha, bcrypt.gensalt())
-            info_usuario = f'{nome}:{codigo_identificacao}:{hashed.decode()}'
-            fout.write(f'usuario_comum:0;administrador:1\n{info_usuario}')
+        return login.LogIn().primeiro_acesso(nome, senha, tipo_conta)
 
-        return administrador.Administrador(nome, codigo_identificacao)
-
-    def criar_conta(self):
+    def criar_conta(self) -> usuario.Usuario:
+        """
+        Solicita o tipo de conta a ser criada
+        :return: instancia da subclasse de Usuario (Administrador / UsuarioComum) escolhida
+        """
         print('[1] Usuario Comum')
         print('[2] Administrador')
         opcao = int(input('Opcao: '))
 
-        if opcao == 1:
-            return self.criar_conta_comum()
-        elif opcao == 2:
-            return self.criar_conta_administrador()
-        else:
-            raise Exception('Opcao nao existente')
+        return login.LogIn().criar_conta(opcao)
 
     @staticmethod
-    def criar_conta_comum():
-        nome = str(input('Nome do usuario: '))
+    def criar_conta_comum() -> usuario_comum.UsuarioComum:
+        """
+        Cria uma nova conta comum
+        :return: instancia de UsuarioComum
+        """
+        nome = str(input('Usuario: '))
         senha = getpass.getpass('Senha: ').encode()
 
-        with open('data/.data', 'r') as fin:
-            text = fin.readlines()
-            for v in text[0].split(';'):
-                if 'usuario_comum' in v:
-                    n_usuarios_comuns = int(v.split(':')[1])+1
-                    codigo_identificacao = 'C' + str(n_usuarios_comuns)
-                else:
-                    n_administradores = int(v.split(':')[1])
-            hashed = bcrypt.hashpw(senha, bcrypt.gensalt())
-            text[0] = f'usuario_comum:{n_usuarios_comuns};administrador:{n_administradores}\n'
-            info_usuario = f'{nome}:{codigo_identificacao}:{hashed.decode()}'
-            text.append('\n' + info_usuario)
-
-        with open('data/.data', 'w') as fout:
-            fout.writelines(text)
-
-        return usuarioComum.UsuarioComum(nome, codigo_identificacao)
+        return login.LogIn().criar_conta_comum(nome, senha, 'conta_comum')
 
     @staticmethod
-    def criar_conta_administrador():
-        nome = str(input('Nome do usuario: '))
+    def criar_conta_administrador() -> administrador.Administrador:
+        """
+        Cria uma nova conta de administrador
+        :return: instancia de Administrador
+        """
+        nome = str(input('Usuario: '))
         senha = getpass.getpass('Senha: ').encode()
 
-        with open('data/.data', 'r') as fin:
-            text = fin.readlines()
-            for v in text[0].split(';'):
-                if 'usuario_comum' in v:
-                    n_usuarios_comuns = int(v.split(':')[1])
-                else:
-                    n_administradores = int(v.split(':')[1])+1
-                    codigo_identificacao = 'A' + str(n_administradores)
-            hashed = bcrypt.hashpw(senha, bcrypt.gensalt(rounds=15))
-            text[0] = f'usuario_comum:{n_usuarios_comuns};administrador:{n_administradores}\n'
-            info_usuario = f'{nome}:{codigo_identificacao}:{hashed.decode()}'
-            text.append('\n' + info_usuario)
 
-        with open('data/.data', 'w') as fout:
-            fout.writelines(text)
-
-        return administrador.Administrador(nome, codigo_identificacao)
-
-    @staticmethod
-    def verificar_hierarquia(nome, senha, usuarios):
-        for line in usuarios.splitlines():
-            try:
-                line_vec = line.split(':')
-                if line_vec[0] == nome:
-                    if bcrypt.checkpw(senha, line_vec[2].encode()):
-                        if line_vec[1][0] == 'A':
-                            return administrador.Administrador(nome, line_vec[1])
-                        elif line_vec[1][0] == 'C':
-                            return usuarioComum.UsuarioComum(nome, line_vec[1])
-            except:
-                continue
-        raise Exception('Erro ao tentar logar')
+        return login.LogIn().criar_conta_administrador(nome, senha, 'administrador')

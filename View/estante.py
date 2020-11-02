@@ -1,28 +1,29 @@
-from View import login
-from Model import estante, administrador
-import os
 import getpass
+
+from Model import estante, administrador, usuario, login
 
 
 class Estante:
-    def adicionar(self, usuario):
+    def adicionar(self, usuario: usuario.Usuario):
+        """
+        Adiciona uma nova estante ao arquivo
+        :param usuario: usuario logado no momento da operação
+        """
         est = estante.Estante(str(input('Codigo da estante: ')))
-
         try:
             if type(usuario) is administrador.Administrador:
                 est.adicionar()
+                print(f'Estante {est.get_codigo()} adicionada ao arquivo!')
             else:
-                nome = str(input('Autorizacao do administrador\nUsuario: '))
-                senha = getpass.getpass('Senha: ').encode()
+                nome_admin = str(input('Autorizacao do administrador:\nUsuario: '))
+                senha_admin = getpass.getpass('Senha: ').encode()
 
-                with open('data/.data') as _usuarios:
-                    usuario_autorizacao = login.LogIn().verificar_hierarquia(nome, senha, _usuarios.read())
-                    if type(usuario_autorizacao) is administrador.Administrador:
-                        if not est.existe_estante():
-                            os.system(f'mkdir data/arquivo/{est.get_codigo()}')
-                        else:
-                            raise Exception('Estante ja existente')
-                    else:
-                        print('Conta de administrador incorreta')
+                admin = login.LogIn().verificar_hierarquia(nome_admin, senha_admin)
+                if type(admin) is administrador.Administrador:
+                    est.adicionar()
+                    print(f'Estante {est.get_codigo()} adicionada ao arquivo!')
+                else:
+                    raise Exception('Erro na autorização do administrador')
+
         except Exception as e:
             raise e

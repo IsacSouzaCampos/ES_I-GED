@@ -1,14 +1,18 @@
-from Model import caixa
-import os
+from Model import caixa, estante, administrador
 
 
 class Caixa:
     @staticmethod
-    def adicionar():
-        cx = caixa.Caixa(str(input('Estante da caixa: ')), str(input('Codigo da caixa: ')))
+    def adicionar(usuario):
+        try:
+            est = estante.Estante(str(input('Estante da caixa: ')))
+            if est.existe_estante():
+                cx = caixa.Caixa(est.get_codigo(), str(input('Codigo da caixa: ')))
+                cx.adicionar(usuario)
+            else:
+                raise Exception('Estante não encontrada!')
 
-        if cx.verificar_existencia():
-            raise Exception('Caixa ja existente!')
+            print(f'Caixa {cx.get_codigo()} adicionada à estante {cx.get_estante()}!')
 
-        cx.adicionar()
-        print('Caixa adicionada ao arquivo!')
+        except Exception as e:
+            raise e

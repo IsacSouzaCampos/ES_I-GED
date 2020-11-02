@@ -1,9 +1,8 @@
 import getpass
 
 class usuario:
-    def __init__(self, nome=None, codigo_identificacao=None):
+    def __init__(self, nome=None):
         self.nome = nome
-        self.numero_identificacao = codigo_identificacao
 
     @staticmethod
     def adicionar_usuario():
