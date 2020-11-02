@@ -63,7 +63,7 @@ class Documento:
                                                    f'Anexado ao documento: [{item2[2]}]'
 
             df_item2 = df2.loc[df2['Numero de Protocolo'].astype(str) == item2[2]]
-            df_item2['Anexos'] += f'[{item1[2]}]\n'
+            df_item2['Anexos'] += f'[{item1[2]}]\n'.replace(' ', '')
 
             df2 = df2.drop(df_item2.index)
 
@@ -102,7 +102,7 @@ class Documento:
                 while '  ' in dado_pesquisa:
                     dado_pesquisa = dado_pesquisa.replace('  ', ' ')
                 for index, row in df.iterrows():
-                    if dado_pesquisa in row[opcao]:
+                    if dado_pesquisa.lower() in row[opcao].lower():
                         vec = f.split('/')
                         results.append([vec[-2], vec[-1], row['Assunto'], row['Partes Interessadas'],
                                         row['Numero de Protocolo'], row['Anexos'], row['Historico de Tramitacao']])

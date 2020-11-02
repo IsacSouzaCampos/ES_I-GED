@@ -66,7 +66,7 @@ class Documento:
             print(f'Assunto: {row["Assunto"]}')
             print(f'Partes Interessadas: {row["Partes Interessadas"]}')
             print(f'Numero de Protocolo: {row["Numero de Protocolo"]}')
-            print(f'Anexos: {row["Anexos"]}')
+            print(f'Anexos: {row["Anexos"][:-1]}')
             print(f'Historico de Tramitacao: {row["Historico de Tramitacao"]}')
         print('*' * 20)
 
@@ -104,6 +104,6 @@ class Documento:
             print(f'Assunto: {dados[2]}')
             print(f'Partes Interessadas: {dados[3]}')
             print(f'Numero de Protocolo: {dados[4]}')
-            print(f'Anexos: {dados[5]}')
+            print(f'Anexos: {dados[5][:-1]}')
             print(f'Historico de Tramitacao: {dados[6]}')
         print('*' * 20)
