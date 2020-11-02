@@ -106,7 +106,7 @@ class LogIn:
                 else:
                     return usuario_comum.UsuarioComum(nome)
 
-        raise Exception('Erro ao tentar logar')
+        raise Exception('Erro de verificação de conta')
 
     @staticmethod
     def existe_usuario(nome: str) -> bool:
