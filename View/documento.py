@@ -7,9 +7,10 @@ class Documento:
     @staticmethod
     def adicionar():
         print('='*20)
-        assunto = str(input('Assunto: '))
+        doc = documento.Documento()
+        doc.set_assunto(str(input('Assunto: ')))
         partes_interessadas_temp = str(input('Partes Interessadas (ex.: nome1 sobrenome1, nome2 sobrenome2): '))
-        numero_protocolo = str(input('Numero de Protocolo: '))
+        doc.set_numero_protocolo(str(input('Numero de Protocolo: ')))
         codigo_estante = str(input('Codigo da Estante: '))
         codigo_caixa = str(input('Codigo da Caixa: '))
 
@@ -20,28 +21,21 @@ class Documento:
             while '  ' in p:
                 p = p.replace('  ', ' ')
             partes_interessadas.append(p)
+        doc.set_partes_interessadas(partes_interessadas)
         try:
-            documento.Documento(assunto, partes_interessadas, numero_protocolo).adicionar(codigo_estante, codigo_caixa)
+            doc.adicionar(codigo_estante, codigo_caixa)
         except Exception as e:
             raise e
 
     @staticmethod
-    def anexar():
+    def anexar(usuario):
         print('*'*20)
-        print('\nDADOS DO ITEM A SER ANEXADO')
-        item1_estante = str(input('Estante: '))
-        item1_caixa = str(input('Caixa: '))
-        item1_protocolo = str(input('Protocolo: '))
+        documento1 = str(input('Protocolo do documento a ser anexado: '))
 
-        print('\nDADOS DO ITEM A RECEBER O ANEXO')
-        item2_estante = str(input('Estante: '))
-        item2_caixa = str(input('Caixa: '))
-        item2_protocolo = str(input('Protocolo: '))
+        documento2 = str(input('Protocolo do documento a receber o anexo: '))
 
-        dados_item1 = (item1_estante, item1_caixa, item1_protocolo)
-        dados_item2 = (item2_estante, item2_caixa, item2_protocolo)
         try:
-            documento.Documento().anexar(dados_item1, dados_item2)
+            documento.Documento().anexar(documento1, documento2, usuario)
         except Exception as e:
             print(e)
 
@@ -97,6 +91,9 @@ class Documento:
         else:
             raise Exception('Opcao nao existente')
 
+        if not results:
+            raise Exception('Documento não encontrado!')
+
         for dados in results:
             print('*'*20)
             print(f'Estante: {dados[0]}  -   Caixa: {dados[1]}')
@@ -107,3 +104,15 @@ class Documento:
             print(f'Anexos: {dados[5][:-1]}')
             print(f'Historico de Tramitacao: {dados[6]}')
         print('*' * 20)
+
+    @staticmethod
+    def tramitar(usuario):
+        doc = documento.Documento()
+        print('*' * 20)
+        doc.set_numero_protocolo(str(input('Protocolo do documento a ser tramitado: ')))
+        print('Localização de destino:')
+        destino_estante = str(input('Estante: '))
+        destino_caixa = str(input('Caixa: '))
+        motivo = str(input('Motivo da tramitação: '))
+
+        doc.tramitar(destino_estante, destino_caixa, motivo, usuario)
