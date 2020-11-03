@@ -15,6 +15,8 @@ class Documento:
         :param codigo_estante: estante a receber o documento
         :param codigo_caixa: caixa a receber o documento
         """
+        if self.pesquisar('Numero de Protocolo', self.get_numero_protocolo()):
+            raise Exception('O protocolo informado já existe no arquivo!')
         try:
             data = date.today()
             historico_tramitacao = f'Data: {data.day}-{data.month}-{data.year}\n' \
@@ -39,35 +41,41 @@ class Documento:
 
         print('Finalizado')
 
-    @staticmethod
-    def anexar(item1, item2):
+    def anexar(self, documento1, documento2, usuario):
         """
         Anexa um documento a outro
         :param item1: contem os dados do documento a ser anexado (estante, caixa, protocolo)
         :param item2: contem os dados do documento a receber o anexo
         """
-        # dados[0] = estante; dados[1] = caixa; dados[2] = protocolo;
+        result = self.pesquisar('Numero de Protocolo', documento1)
+        estante1 = result[0][0]
+        caixa1 = result[0][1]
+        result = self.pesquisar('Numero de Protocolo', documento2)
+        estante2 = result[0][0]
+        caixa2 = result[0][1]
+
         try:
-            df1 = pd.read_csv(f'data/arquivo/{item1[0]}/{item1[1]}.csv', encoding='utf-8')
-            df2 = pd.read_csv(f'data/arquivo/{item2[0]}/{item2[1]}.csv', encoding='utf-8')
+            df1 = pd.read_csv(f'data/arquivo/{estante1}/{caixa1}.csv', encoding='utf-8')
+            df2 = pd.read_csv(f'data/arquivo/{estante2}/{caixa2}.csv', encoding='utf-8')
 
             data = date.today()
-            df_item1 = df1.loc[df1['Numero de Protocolo'].astype(str) == item1[2]]
+            df_documento1 = df1.loc[df1['Numero de Protocolo'].astype(str) == documento1]
 
-            df1 = df1.drop(df_item1.index)
-            df1.to_csv(f'data/arquivo/{item1[0]}/{item1[1]}.csv', index=False, encoding='utf-8')
+            df1 = df1.drop(df_documento1.index)
+            df1.to_csv(f'data/arquivo/{estante1}/{caixa1}.csv', index=False, encoding='utf-8')
 
-            df_item1['Historico de Tramitacao'] += '\n***********************\n' \
+            df_documento1['Historico de Tramitacao'] += '\n***********************\n' \
                                                    f'Data: {data.day}-{data.month}-{data.year}\n' \
-                                                   f'Localizacao: estante_{item2[0]}-caixa_{item2[1]}\n' \
-                                                   f'Anexado ao documento: [{item2[2]}]'
+                                                   f'Localizacao: estante_{estante2}-caixa_{estante2}\n' \
+                                                   f'Motivo: anexado ao documento [{documento2}]\n' \
+                                                   f'Usuario: {usuario.get_nome()}'
 
-            df_item2 = df2.loc[df2['Numero de Protocolo'].astype(str) == item2[2]]
-            df_item2['Anexos'] += f'[{item1[2]}]\n'.replace(' ', '')
+            df_documento2 = df2.loc[df2['Numero de Protocolo'].astype(str) == documento2]
+            df_documento2['Anexos'] += f'[{documento1}]\n'.replace(' ', '')
 
-            df2 = df2.drop(df_item2.index)
+            df2 = df2.drop(df_documento2.index)
 
-            pd.concat([df2, df_item1, df_item2]).to_csv(f'data/arquivo/{item2[0]}/{item2[1]}.csv', index=False,
+            pd.concat([df2, df_documento1, df_documento2]).to_csv(f'data/arquivo/{estante2}/{caixa2}.csv', index=False,
                                                         encoding='utf-8')
         except Exception as e:
             raise e
@@ -104,8 +112,9 @@ class Documento:
                 for index, row in df.iterrows():
                     if dado_pesquisa.lower() in row[opcao].lower():
                         vec = f.split('/')
-                        results.append([vec[-2], vec[-1], row['Assunto'], row['Partes Interessadas'],
-                                        row['Numero de Protocolo'], row['Anexos'], row['Historico de Tramitacao']])
+                        results.append([vec[-2], vec[-1].replace('.csv', ''), row['Assunto'],
+                                        row['Partes Interessadas'], row['Numero de Protocolo'], row['Anexos'],
+                                        row['Historico de Tramitacao']])
 
             elif opcao == 'Data de Insercao':
                 d = dado_pesquisa.split('-')
@@ -117,8 +126,9 @@ class Documento:
                     for line in row['Historico de Tramitacao'].splitlines():
                         if dado_pesquisa in line:
                             vec = f.split('/')
-                            results.append([vec[-2], vec[-1], row['Assunto'], row['Partes Interessadas'],
-                                            row['Numero de Protocolo'], row['Anexos'], row['Historico de Tramitacao']])
+                            results.append([vec[-2], vec[-1].replace('.csv', ''), row['Assunto'],
+                                            row['Partes Interessadas'], row['Numero de Protocolo'], row['Anexos'],
+                                            row['Historico de Tramitacao']])
                         elif 'Localizacao' in line:
                             break
 
@@ -126,12 +136,35 @@ class Documento:
                 for index, row in df.iterrows():
                     if str(row[opcao]) == dado_pesquisa:
                         vec = f.split('/')
-                        results.append([vec[-2], vec[-1], row['Assunto'], row['Partes Interessadas'],
-                                        row['Numero de Protocolo'], row['Anexos'], row['Historico de Tramitacao']])
-
-        if not results:
-            raise Exception('Nenhum documento encontrado!')
+                        results.append([vec[-2], vec[-1].replace('.csv', ''), row['Assunto'],
+                                        row['Partes Interessadas'], row['Numero de Protocolo'], row['Anexos'],
+                                        row['Historico de Tramitacao']])
         return results
+
+    def tramitar(self, destino_estante, destino_caixa, motivo, usuario):
+        result = self.pesquisar('Numero de Protocolo', self.get_numero_protocolo())
+        origem_estante = result[0][0]
+        origem_caixa = result[0][1]
+        try:
+            df1 = pd.read_csv(f'data/arquivo/{origem_estante}/{origem_caixa}.csv', encoding='utf-8')
+            df2 = pd.read_csv(f'data/arquivo/{destino_estante}/{destino_caixa}.csv', encoding='utf-8')
+
+            item = df1.loc[df1['Numero de Protocolo'].astype(str) == self.get_numero_protocolo()]
+            df1 = df1.drop(item.index)
+            df1.to_csv(f'data/arquivo/{origem_estante}/{origem_caixa}.csv', index=False, encoding='utf-8')
+
+            data = date.today()
+            item['Historico de Tramitacao'] += '\n***********************\n' \
+                                               f'Data: {data.day}-{data.month}-{data.year}\n' \
+                                               f'Localizacao: estante_{destino_estante}-caixa_{destino_caixa}\n' \
+                                               f'Motivo: {motivo}\n' \
+                                               f'Usuario: {usuario.get_nome()}'
+
+            pd.concat([df2, item]).to_csv(f'data/arquivo/{destino_estante}/{destino_caixa}.csv', index=False,
+                                          encoding='utf-8')
+
+        except Exception as e:
+            raise e
 
     def get_numero_protocolo(self):
         return self.numero_protocolo

@@ -22,13 +22,15 @@ def main():
             elif opcao == 2:
                 caixa.Caixa().adicionar(usuario_atual)
             elif opcao == 3:
-                documento.Documento().anexar()
+                documento.Documento().anexar(usuario_atual)
             elif opcao == 4:
                 estante.Estante().adicionar(usuario_atual)
             elif opcao == 5:
                 documento.Documento().listar()
             elif opcao == 6:
                 documento.Documento().pesquisar()
+            elif opcao == 7:
+                documento.Documento().tramitar(usuario_atual)
         except Exception as e:
             print(e)
 
@@ -41,6 +43,7 @@ def mostrar_interface() -> int:
     print('[4] Adicionar estante ao arquivo')
     print('[5] Listar documentos de uma caixa')
     print('[6] Pesquisar documento')
+    print('[7] Tramitar')
     print('[0] Sair')
     return int(input('Opcao: '))
 
