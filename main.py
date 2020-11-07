@@ -1,14 +1,9 @@
 from View import login, caixa, documento, estante
-from Model import administrador
-import pandas as pd
 
 
 def main():
-    # df = pd.read_csv('data/arquivo/A/0.csv', encoding='utf-8')
-    # for index, row in df.iterrows():
-    #     print(row['Historico de Tramitacao'])
     try:
-        usuario_atual = login.LogIn().login()
+        usuario = login.LogIn().login()
     except Exception as e:
         print(e)
         return
@@ -20,17 +15,17 @@ def main():
             if opcao == 1:
                 documento.Documento().adicionar()
             elif opcao == 2:
-                caixa.Caixa().adicionar(usuario_atual)
+                caixa.Caixa().adicionar(usuario)
             elif opcao == 3:
-                documento.Documento().anexar(usuario_atual)
+                documento.Documento().anexar(usuario)
             elif opcao == 4:
-                estante.Estante().adicionar(usuario_atual)
+                estante.Estante().adicionar(usuario)
             elif opcao == 5:
                 documento.Documento().listar()
             elif opcao == 6:
                 documento.Documento().pesquisar()
             elif opcao == 7:
-                documento.Documento().tramitar(usuario_atual)
+                documento.Documento().tramitar(usuario)
         except Exception as e:
             print(e)
 
