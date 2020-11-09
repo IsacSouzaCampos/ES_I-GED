@@ -2,21 +2,28 @@ import os
 import pandas as pd
 from datetime import date
 
+from Model import estante, caixa
+
 
 class Documento:
-    def __init__(self, assunto=None, partes_interessadas=None, numero_protocolo=None):
+    def __init__(self, caixa=None, assunto=None, partes_interessadas=None, protocolo=None, anexos=None,
+                 historico_tramitacao=''):
+        self.caixa = caixa
         self.assunto = assunto
         self.partes_interessadas = partes_interessadas
-        self.numero_protocolo = numero_protocolo
+        self.protocolo = protocolo
+        self.anexos = anexos
+        self.historico_tramitacao = historico_tramitacao
 
-    def adicionar(self, codigo_estante: str, codigo_caixa: str):
-        """
-        Adiciona um documento no arquivo
-        :param codigo_estante: estante a receber o documento
-        :param codigo_caixa: caixa a receber o documento
-        """
-        if self.pesquisar('Numero de Protocolo', self.get_numero_protocolo()):
+    def adicionar(self):
+        try:
+            self.pesquisar('Protocolo', self.get_protocolo())
             raise Exception('O protocolo informado já existe no arquivo!')
+        except:
+            pass
+
+        codigo_estante = self.get_caixa().get_estante().get_codigo()
+        codigo_caixa = self.get_caixa().get_codigo()
         try:
             data = date.today()
             historico_tramitacao = f'Data: {data.day}-{data.month}-{data.year}\n' \
@@ -24,11 +31,12 @@ class Documento:
 
             df2 = pd.DataFrame({'Assunto': [self.get_assunto()],
                                 'Partes Interessadas': [self.get_partes_interessadas()],
-                                'Numero de Protocolo': [self.get_numero_protocolo()],
+                                'Protocolo': [self.get_protocolo()],
                                 'Anexos': [' '],
                                 'Historico de Tramitacao': [historico_tramitacao]})
 
             with open(f'data/arquivo/{codigo_estante}/{codigo_caixa}.csv', encoding='utf-8') as fin:
+                print(f'estante {codigo_estante}\ncaixa {codigo_caixa}')
                 if not fin.read():
                     df2.to_csv(f'data/arquivo/{codigo_estante}/{codigo_caixa}.csv', index=False, encoding='utf-8')
                 else:
@@ -41,47 +49,49 @@ class Documento:
 
         print('Finalizado')
 
-    def anexar(self, documento1, documento2, usuario):
+    def anexar(self, protocolo1, protocolo2, usuario):
         """
         Anexa um documento a outro
         :param item1: contem os dados do documento a ser anexado (estante, caixa, protocolo)
         :param item2: contem os dados do documento a receber o anexo
         """
-        result = self.pesquisar('Numero de Protocolo', documento1)
-        estante1 = result[0][0]
-        caixa1 = result[0][1]
-        result = self.pesquisar('Numero de Protocolo', documento2)
-        estante2 = result[0][0]
-        caixa2 = result[0][1]
+        documento1 = self.pesquisar('Protocolo', protocolo1)[0]
+        documento2 = self.pesquisar('Protocolo', protocolo2)[0]
+
+        estante1 = documento1.get_caixa().get_estante().get_codigo()
+        caixa1 = documento1.get_caixa().get_codigo()
+        estante2 = documento2.get_caixa().get_estante().get_codigo()
+        caixa2 = documento2.get_caixa().get_codigo()
 
         try:
             df1 = pd.read_csv(f'data/arquivo/{estante1}/{caixa1}.csv', encoding='utf-8')
             df2 = pd.read_csv(f'data/arquivo/{estante2}/{caixa2}.csv', encoding='utf-8')
 
             data = date.today()
-            df_documento1 = df1.loc[df1['Numero de Protocolo'].astype(str) == documento1]
+            df_documento1 = df1.loc[df1['Protocolo'].astype(str) == documento1.get_protocolo()]
 
             df1 = df1.drop(df_documento1.index)
-            df1.to_csv(f'data/arquivo/{estante1}/{caixa1}.csv', index=False, encoding='utf-8')
+            df1.to_csv(f'data/arquivo/{estante1}/{caixa1}.csv', index=False,
+                       encoding='utf-8')
 
             df_documento1['Historico de Tramitacao'] += '\n***********************\n' \
                                                    f'Data: {data.day}-{data.month}-{data.year}\n' \
-                                                   f'Localizacao: estante_{estante2}-caixa_{estante2}\n' \
-                                                   f'Motivo: anexado ao documento [{documento2}]\n' \
+                                                   f'Localizacao: estante_{estante2}-caixa_{caixa2}\n' \
+                                                   f'Motivo: anexado ao documento [{documento2.get_protocolo()}]\n' \
                                                    f'Usuario: {usuario.get_nome()}'
 
-            df_documento2 = df2.loc[df2['Numero de Protocolo'].astype(str) == documento2]
-            df_documento2['Anexos'] += f'[{documento1}]\n'.replace(' ', '')
+            df_documento2 = df2.loc[df2['Protocolo'].astype(str) == documento2.get_protocolo()]
+            df_documento2['Anexos'] += f'[{documento1.get_protocolo()}]\n'.replace(' ', '')
 
             df2 = df2.drop(df_documento2.index)
 
             pd.concat([df2, df_documento1, df_documento2]).to_csv(f'data/arquivo/{estante2}/{caixa2}.csv', index=False,
-                                                        encoding='utf-8')
+                                                                  encoding='utf-8')
         except Exception as e:
             raise e
 
     @staticmethod
-    def pesquisar(opcao: str, dado_pesquisa: str) -> list:
+    def pesquisar(opcao: str, dado_pesquisa: str):
         """
         Pesquisa por um documento em todo o arquivo, levando em conta o dado informado pelo usuário
         :param opcao: dado que será levado em conta para a pesquisa
@@ -113,7 +123,7 @@ class Documento:
                     if dado_pesquisa.lower() in row[opcao].lower():
                         vec = f.split('/')
                         results.append([vec[-2], vec[-1].replace('.csv', ''), row['Assunto'],
-                                        row['Partes Interessadas'], row['Numero de Protocolo'], row['Anexos'],
+                                        row['Partes Interessadas'], row['Protocolo'], row['Anexos'],
                                         row['Historico de Tramitacao']])
 
             elif opcao == 'Data de Insercao':
@@ -127,7 +137,7 @@ class Documento:
                         if dado_pesquisa in line:
                             vec = f.split('/')
                             results.append([vec[-2], vec[-1].replace('.csv', ''), row['Assunto'],
-                                            row['Partes Interessadas'], row['Numero de Protocolo'], row['Anexos'],
+                                            row['Partes Interessadas'], row['Protocolo'], row['Anexos'],
                                             row['Historico de Tramitacao']])
                         elif 'Localizacao' in line:
                             break
@@ -137,40 +147,46 @@ class Documento:
                     if str(row[opcao]) == dado_pesquisa:
                         vec = f.split('/')
                         results.append([vec[-2], vec[-1].replace('.csv', ''), row['Assunto'],
-                                        row['Partes Interessadas'], row['Numero de Protocolo'], row['Anexos'],
+                                        row['Partes Interessadas'], row['Protocolo'], row['Anexos'],
                                         row['Historico de Tramitacao']])
-        return results
+        documentos = []
+        for r in results:
+            cx = caixa.Caixa(estante.Estante(r[0]), r[1])
+            documentos.append(Documento(cx, r[2], r[3], r[4], r[5], r[6]))
+        return documentos
 
-    def tramitar(self, destino_estante, destino_caixa, motivo, usuario):
-        result = self.pesquisar('Numero de Protocolo', self.get_numero_protocolo())
-        origem_estante = result[0][0]
-        origem_caixa = result[0][1]
+    def tramitar(self, caixa_destino, motivo, usuario):
+        origem_estante = self.get_caixa().get_estante().get_codigo()
+        origem_caixa = self.get_caixa().get_codigo()
+
+        destino_estante = caixa_destino.get_estante().get_codigo()
         try:
             df1 = pd.read_csv(f'data/arquivo/{origem_estante}/{origem_caixa}.csv', encoding='utf-8')
-            df2 = pd.read_csv(f'data/arquivo/{destino_estante}/{destino_caixa}.csv', encoding='utf-8')
+            df2 = pd.read_csv(f'data/arquivo/{destino_estante}/{caixa_destino.get_codigo()}.csv', encoding='utf-8')
 
-            item = df1.loc[df1['Numero de Protocolo'].astype(str) == self.get_numero_protocolo()]
+            item = df1.loc[df1['Protocolo'].astype(str) == self.get_protocolo()]
             df1 = df1.drop(item.index)
             df1.to_csv(f'data/arquivo/{origem_estante}/{origem_caixa}.csv', index=False, encoding='utf-8')
 
             data = date.today()
             item['Historico de Tramitacao'] += '\n***********************\n' \
                                                f'Data: {data.day}-{data.month}-{data.year}\n' \
-                                               f'Localizacao: estante_{destino_estante}-caixa_{destino_caixa}\n' \
+                                               f'Localizacao: estante_{destino_estante}-caixa_' \
+                                               f'{caixa_destino.get_codigo()}\n' \
                                                f'Motivo: {motivo}\n' \
                                                f'Usuario: {usuario.get_nome()}'
 
-            pd.concat([df2, item]).to_csv(f'data/arquivo/{destino_estante}/{destino_caixa}.csv', index=False,
-                                          encoding='utf-8')
+            pd.concat([df2, item]).to_csv(f'data/arquivo/{destino_estante}/{caixa_destino.get_codigo()}.csv',
+                                          index=False, encoding='utf-8')
 
         except Exception as e:
             raise e
 
-    def get_numero_protocolo(self):
-        return self.numero_protocolo
+    def get_caixa(self):
+        return self.caixa
 
-    def set_numero_protocolo(self, numero_protocolo):
-        self.numero_protocolo = numero_protocolo
+    def set_caixa(self, caixa):
+        self.caixa = caixa
 
     def get_assunto(self):
         return self.assunto
@@ -183,3 +199,15 @@ class Documento:
 
     def set_partes_interessadas(self, partes_interessadas):
         self.partes_interessadas = partes_interessadas
+
+    def set_protocolo(self, protocolo):
+        self.protocolo = protocolo
+
+    def get_protocolo(self):
+        return self.protocolo
+
+    def get_anexos(self):
+        return self.anexos
+
+    def get_historico_tramitacao(self):
+        return self.historico_tramitacao

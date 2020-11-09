@@ -1,3 +1,11 @@
-Assunto,Partes Interessadas,Numero de Protocolo,Anexos,Historico de Tramitacao
-processo1,"['Mônica', 'Cebolinha']",1, ,"Data: 2-11-2020
+Assunto,Partes Interessadas,Protocolo,Anexos,Historico de Tramitacao
+Denúncia de Fraude Eleitoral,"['Prefeito', 'Oposição']",denunciafraude, ,"Data: 7-11-2020
+Localizacao: estante_B-caixa_0
+***********************
+Data: 7-11-2020
+Localizacao: estante_A-caixa_0
+Motivo: anexado ao documento [eleicao2020]
+Usuario: isac"
+Eleições 2020,"['Prefeito', 'Vice-prefeito']",eleicao2020," [denunciafraude]
+","Data: 7-11-2020
 Localizacao: estante_A-caixa_0"
