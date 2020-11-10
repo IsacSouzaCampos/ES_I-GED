@@ -112,9 +112,9 @@ class Documento:
         print('*' * 20)
         doc = documento.Documento().pesquisar('Protocolo', str(input('Protocolo do documento a ser tramitado: ')))[0]
         print('Localização de destino:')
-        destino_estante = str(input('Estante: '))
+        estante_destino = str(input('Estante: '))
         destino_caixa = str(input('Caixa: '))
         motivo = str(input('Motivo da tramitação: '))
 
-        cx = caixa.Caixa(estante.Estante(destino_estante), destino_caixa)
+        cx = caixa.Caixa(estante.Estante(estante_destino), destino_caixa)
         doc.tramitar(cx, motivo, usuario)

@@ -156,27 +156,27 @@ class Documento:
         return documentos
 
     def tramitar(self, caixa_destino, motivo, usuario):
-        origem_estante = self.get_caixa().get_estante().get_codigo()
-        origem_caixa = self.get_caixa().get_codigo()
+        estante_origem = self.get_caixa().get_estante().get_codigo()
+        caixa_origem = self.get_caixa().get_codigo()
 
-        destino_estante = caixa_destino.get_estante().get_codigo()
+        estante_destino = caixa_destino.get_estante().get_codigo()
         try:
-            df1 = pd.read_csv(f'data/arquivo/{origem_estante}/{origem_caixa}.csv', encoding='utf-8')
-            df2 = pd.read_csv(f'data/arquivo/{destino_estante}/{caixa_destino.get_codigo()}.csv', encoding='utf-8')
+            df1 = pd.read_csv(f'data/arquivo/{estante_origem}/{caixa_origem}.csv', encoding='utf-8')
+            df2 = pd.read_csv(f'data/arquivo/{estante_destino}/{caixa_destino.get_codigo()}.csv', encoding='utf-8')
 
             item = df1.loc[df1['Protocolo'].astype(str) == self.get_protocolo()]
             df1 = df1.drop(item.index)
-            df1.to_csv(f'data/arquivo/{origem_estante}/{origem_caixa}.csv', index=False, encoding='utf-8')
+            df1.to_csv(f'data/arquivo/{estante_origem}/{caixa_origem}.csv', index=False, encoding='utf-8')
 
             data = date.today()
             item['Historico de Tramitacao'] += '\n***********************\n' \
                                                f'Data: {data.day}-{data.month}-{data.year}\n' \
-                                               f'Localizacao: estante_{destino_estante}-caixa_' \
+                                               f'Localizacao: estante_{estante_destino}-caixa_' \
                                                f'{caixa_destino.get_codigo()}\n' \
                                                f'Motivo: {motivo}\n' \
                                                f'Usuario: {usuario.get_nome()}'
 
-            pd.concat([df2, item]).to_csv(f'data/arquivo/{destino_estante}/{caixa_destino.get_codigo()}.csv',
+            pd.concat([df2, item]).to_csv(f'data/arquivo/{estante_destino}/{caixa_destino.get_codigo()}.csv',
                                           index=False, encoding='utf-8')
 
         except Exception as e:
