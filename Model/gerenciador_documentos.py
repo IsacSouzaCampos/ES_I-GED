@@ -13,6 +13,7 @@ class GerenciadorDocumentos:
         codigo_caixa = documento.get_codigo_caixa()
         try:
             self.atualizar_banco_dados(documento, codigo_estante, codigo_caixa)
+            self.documentos.append(documento)
         except Exception as e:
             raise Exception(e)
 

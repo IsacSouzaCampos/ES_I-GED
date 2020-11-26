@@ -1,6 +1,5 @@
 from View import login, gerenciador_caixas as gcv, gerenciador_documentos as gdv, gerenciador_estantes as gev
 from Model import arquivo as arq
-from Model import estante as estm, caixa as cxm, documento as docm
 
 
 def main():
@@ -16,12 +15,17 @@ def main():
         opcao = mostrar_interface()
         try:
             if opcao == 1:
-                codigo = gev.GerenciadorEstantes().adicionar(usuario)
-                ger_est.adicionar(codigo)
+                codigo, disponibilidade = gev.GerenciadorEstantes().adicionar(usuario)
+                ger_est.adicionar(codigo, disponibilidade)
             elif opcao == 2:
                 codigo, codigo_estante = gcv.GerendiadorCaixas().adicionar()
                 if ger_est.existe_estante(codigo_estante):
-                    ger_cx.adicionar(codigo, codigo_estante, usuario)
+                    if ger_est.possui_disponibilidade(codigo_estante):
+                        ger_cx.adicionar(codigo, codigo_estante, usuario)
+                    else:
+                        print('Estante indisponivel no momento!')
+                else:
+                    print('Estante nao encontrada!')
             elif opcao == 3:
                 documento = gdv.GerenciadorDocumentos().adicionar()
                 codigo_caixa = documento.get_codigo_caixa()

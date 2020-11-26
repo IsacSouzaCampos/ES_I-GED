@@ -18,6 +18,7 @@ class GerenciadorCaixas:
 
             if type(usuario) is administrador.Administrador:
                 self.atualizar_banco_dados(codigo, codigo_estante)
+                self.caixas.append(cx.Caixa(codigo, codigo_estante))
             else:
                 nome_admin = str(input('Autorizacao do administrador:\nUsuario: '))
                 senha_admin = getpass.getpass('Senha: ').encode()
