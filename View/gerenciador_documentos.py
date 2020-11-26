@@ -1,19 +1,18 @@
-from Model import estante, documento, caixa
+from Model import estante as est, documento as doc, caixa as cx
+from Model import gerenciador_documentos
 import os
 import pandas as pd
 
 
-class Documento:
+class GerenciadorDocumentos:
     @staticmethod
     def adicionar():
         print('='*20)
-        doc = documento.Documento()
-        doc.set_assunto(str(input('Assunto: ')))
+
+        protocolo = str(input('Protocolo: '))
+        caixa = str(input('Codigo da Caixa: '))
+        assunto = str(input('Assunto: '))
         partes_interessadas_temp = str(input('Partes Interessadas (ex.: nome1 sobrenome1, nome2 sobrenome2): '))
-        doc.set_protocolo(str(input('Protocolo: ')))
-        codigo_estante = str(input('Codigo da Estante: '))
-        codigo_caixa = str(input('Codigo da Caixa: '))
-        doc.set_caixa(caixa.Caixa(estante.Estante(codigo_estante), codigo_caixa))
 
         partes_interessadas_temp = partes_interessadas_temp.split(',')
         partes_interessadas = []
@@ -22,11 +21,10 @@ class Documento:
             while '  ' in p:
                 p = p.replace('  ', ' ')
             partes_interessadas.append(p)
-        doc.set_partes_interessadas(partes_interessadas)
-        try:
-            doc.adicionar()
-        except Exception as e:
-            raise e
+
+        documento = doc.Documento(protocolo, caixa, assunto, partes_interessadas, '')
+
+        return documento
 
     @staticmethod
     def anexar(usuario):
