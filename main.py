@@ -1,10 +1,10 @@
 from View import login, gerenciador_caixas as gcv, gerenciador_documentos as gdv, gerenciador_estantes as gev
-from Model import arquivo as arq
+from Model import arquivo as arq, administrador
 
 
 def main():
     try:
-        usuario = login.LogIn().login()
+        usuario = administrador.Administrador()
         ger_est, ger_cx, ger_doc = arq.Arquivo().carregar_arquivo()
     except Exception as e:
         print(e)
@@ -22,6 +22,7 @@ def main():
                 if ger_est.existe_estante(codigo_estante):
                     if ger_est.possui_disponibilidade(codigo_estante):
                         ger_cx.adicionar(codigo, codigo_estante, usuario)
+                        ger_est.atualizar_disponibilidade(codigo_estante)
                     else:
                         print('Estante indisponivel no momento!')
                 else:

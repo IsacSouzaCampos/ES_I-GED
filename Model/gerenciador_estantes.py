@@ -30,14 +30,16 @@ class GerenciadorEstantes:
         return False
 
     def atualizar_disponibilidade(self, codigo):
+        disponibilidade = int()
         for estante in self.estantes:
-            if estante.get_codigo() == codigo:
-                disponibilidade = estante.get_disponibilidade()
+            if str(estante.get_codigo()) == str(codigo):
+                disponibilidade = int(estante.get_disponibilidade())
                 estante.set_disponibilidade(disponibilidade - 1)
 
         # TODO
-        # df = pd.read_csv('data/arquivo/estante.csv', encoding='utf-8')
-        # df[]
+        df = pd.read_csv('data/arquivo/estante.csv', encoding='utf-8')
+        df.loc[df['cod'].astype(str) == str(codigo), ['disponibilidade']] = disponibilidade - 1
+        df.to_csv('data/arquivo/estante.csv', index=False, encoding='utf-8')
 
     @staticmethod
     def atualizar_banco_dados(codigo, disponibilidade):
@@ -57,6 +59,6 @@ class GerenciadorEstantes:
 
     def get_estante(self, codigo):
         for estante in self.estantes:
-            if codigo == estante.get_codigo():
+            if str(codigo) == str(estante.get_codigo()):
                 return estante
         raise Exception('Estante não encontrada!')
