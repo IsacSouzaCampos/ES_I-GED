@@ -2,42 +2,27 @@ from View import login, gerenciador_caixas as gcv, gerenciador_documentos as gdv
 from Model import arquivo as arq, administrador
 
 
-def main():
-    try:
-        usuario = administrador.Administrador()
-        ger_est, ger_cx, ger_doc = arq.Arquivo().carregar_arquivo()
-    except Exception as e:
-        print(e)
-        return
+usuario = administrador.Administrador()
+ger_est, ger_cx, ger_doc = arq.Arquivo().carregar_arquivo()
 
+
+def main():
     opcao = -1
     while opcao != 0:
         opcao = mostrar_interface()
         try:
             if opcao == 1:
-                codigo, disponibilidade = gev.GerenciadorEstantes().adicionar(usuario)
-                ger_est.adicionar(codigo, disponibilidade)
+                adicionar_estante()
             elif opcao == 2:
-                codigo, codigo_estante = gcv.GerendiadorCaixas().adicionar()
-                if ger_est.existe_estante(codigo_estante):
-                    if ger_est.possui_disponibilidade(codigo_estante):
-                        ger_cx.adicionar(codigo, codigo_estante, usuario)
-                        ger_est.atualizar_disponibilidade(codigo_estante)
-                    else:
-                        print('Estante indisponivel no momento!')
-                else:
-                    print('Estante nao encontrada!')
+                adicionar_caixa()
             elif opcao == 3:
-                documento = gdv.GerenciadorDocumentos().adicionar()
-                codigo_caixa = documento.get_codigo_caixa()
-                caixa = ger_cx.get_caixa(codigo_caixa)
-                ger_doc.adicionar(documento, caixa.get_codigo_estante())
+                adicionar_documento()
             elif opcao == 4:
-                pass
+                anexar_documentos()
             elif opcao == 5:
                 pass
             elif opcao == 6:
-                pass
+                pesquisar_documento()
             elif opcao == 7:
                 pass
         except Exception as e:
@@ -55,6 +40,53 @@ def mostrar_interface() -> int:
     print('[7] Tramitar')
     print('[0] Sair')
     return int(input('Opcao: '))
+
+
+def adicionar_estante():
+    codigo, disponibilidade = gev.GerenciadorEstantes().adicionar(usuario)
+    ger_est.adicionar(codigo, disponibilidade)
+
+
+def adicionar_caixa():
+    codigo, codigo_estante = gcv.GerendiadorCaixas().adicionar()
+    if ger_est.existe_estante(codigo_estante):
+        if ger_est.possui_disponibilidade(codigo_estante):
+            ger_cx.adicionar(codigo, codigo_estante, usuario)
+            ger_est.atualizar_csv_disponibilidade(codigo_estante)
+        else:
+            print('Estante indisponivel no momento!')
+    else:
+        print('Estante nao encontrada!')
+
+
+def adicionar_documento():
+    documento = gdv.GerenciadorDocumentos().adicionar()
+    codigo_caixa = documento.get_codigo_caixa()
+    caixa = ger_cx.get_caixa(codigo_caixa)
+    ger_doc.adicionar(documento, caixa.get_codigo_estante())
+
+
+def anexar_documentos():
+    protocolo1, protocolo2 = gdv.GerenciadorDocumentos().anexar()
+    documento1 = ger_doc.pesquisar('protocolo', protocolo1)
+    documento2 = ger_doc.pesquisar('protocolo', protocolo2)
+    ger_doc.anexar(documento1, documento2, usuario.get_nome())
+
+
+def listar_documentos_caixa():
+    pass
+
+
+def pesquisar_documento():
+    forma_pesquisa, dado_pesquisado = gdv.GerenciadorDocumentos().pesquisar()
+    documentos = ger_doc.pesquisar(forma_pesquisa, dado_pesquisado)
+    for documento in documentos:
+        codigo_estante = ger_cx.get_caixa(documento.get_codigo_caixa()).get_codigo_estante()
+        documento.imprimir(codigo_estante)
+
+
+def tramitar():
+    pass
 
 
 if __name__ == '__main__':

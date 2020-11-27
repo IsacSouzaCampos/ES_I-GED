@@ -1,6 +1,8 @@
 import pandas as pd
 from datetime import date
 
+from Model import documento as doc
+
 
 class GerenciadorDocumentos:
     def __init__(self, documentos):
@@ -12,67 +14,60 @@ class GerenciadorDocumentos:
 
         codigo_caixa = documento.get_codigo_caixa()
         try:
-            self.atualizar_banco_dados(documento, codigo_estante, codigo_caixa)
+            data = date.today()
+            documento.set_historico_tramitacao(f'Inserção: {data.day}-{data.month}-{data.year}\n'
+                                               f'Localizacao: estante_{codigo_estante}-caixa_{codigo_caixa}')
+            self.atualizar_csv_adicionar(documento, codigo_estante, codigo_caixa)
             self.documentos.append(documento)
         except Exception as e:
             raise Exception(e)
 
         print('Finalizado')
 
-    def anexar(self, protocolo1, protocolo2, usuario):
-        """
-        Anexa um documento a outro
-        :param item1: contem os dados do documento a ser anexado (estante, caixa, protocolo)
-        :param item2: contem os dados do documento a receber o anexo
-        """
-        documento1 = self.pesquisar('Protocolo', protocolo1)[0]
-        documento2 = self.pesquisar('Protocolo', protocolo2)[0]
-
-        estante1 = documento1.get_caixa().get_estante().get_codigo()
-        caixa1 = documento1.get_caixa().get_codigo()
-        estante2 = documento2.get_caixa().get_estante().get_codigo()
-        caixa2 = documento2.get_caixa().get_codigo()
-
+    def anexar(self, d1, d2, nome_usuario):
         try:
-            df1 = pd.read_csv(f'data/arquivo/{estante1}/{caixa1}.csv', encoding='utf-8')
-            df2 = pd.read_csv(f'data/arquivo/{estante2}/{caixa2}.csv', encoding='utf-8')
-
             data = date.today()
-            df_documento1 = df1.loc[df1['Protocolo'].astype(str) == documento1.get_protocolo()]
+            data_atual = f'{data.day}-{data.month}-{data.year}'
+            nova_localizacao = f'estante_{d2.get_codigo_caixa().get_codigo_estante()}-caixa_{d2.get_codigo_caixa()}'
+            motivo = f'anexado ao documento {d2.get_protocolo()}'
 
-            df1 = df1.drop(df_documento1.index)
-            df1.to_csv(f'data/arquivo/{estante1}/{caixa1}.csv', index=False,
-                       encoding='utf-8')
+            ht_d1 = f'\n*********\nData: {data_atual}\nLocalizacao: {nova_localizacao}\nMotivo: ' \
+                      f'{motivo}\nUsuario: {nome_usuario}'
 
-            df_documento1['Historico de Tramitacao'] += '\n***********************\n' \
-                                                   f'Data: {data.day}-{data.month}-{data.year}\n' \
-                                                   f'Localizacao: estante_{estante2}-caixa_{caixa2}\n' \
-                                                   f'Motivo: anexado ao documento [{documento2.get_protocolo()}]\n' \
-                                                   f'Usuario: {usuario.get_nome()}'
+            novos_anexos_d1 = [d2.get_protocolo(), d2.get_anexos()]
+            novos_anexos_d2 = [d1.get_protocolo(), d1.get_anexos()]
 
-            df_documento2 = df2.loc[df2['Protocolo'].astype(str) == documento2.get_protocolo()]
-            df_documento2['Anexos'] += f'[{documento1.get_protocolo()}]\n'.replace(' ', '')
+            self.atualizar_csv_tramitar(d1, d2, ht_d1, novos_anexos_d1, novos_anexos_d2)
 
-            df2 = df2.drop(df_documento2.index)
+            d1.set_codigo_caixa(d2.get_codigo_caixa())
+            d1.set_historico_tramitacao(d1.get_historico_tramitacao() + ht_d1)
+            d1.set_anexos(list(d1.get_anexos()).append(novos_anexos_d1))
 
-            pd.concat([df2, df_documento1, df_documento2]).to_csv(f'data/arquivo/{estante2}/{caixa2}.csv', index=False,
-                                                                  encoding='utf-8')
+            d2.set_anexos(list(d2.get_anexos()).append(novos_anexos_d2))
+
+            cont = 0
+            for i in range(len(self.documentos)):
+                if str(self.documentos[i].get_protocolo()) == str(d1.get_protocolo()):
+                    self.documentos[i] = d1
+                    cont += 1
+                if str(self.documentos[i].get_protocolo()) == str(d2.get_protocolo()):
+                    self.documentos[i] = d2
+                    cont += 1
+                if cont == 2:
+                    break
+
         except Exception as e:
             raise e
 
     @staticmethod
-    def atualizar_banco_dados(documento, codigo_estante, codigo_caixa):
+    def atualizar_csv_adicionar(documento, codigo_estante, codigo_caixa):
         try:
-            data = date.today()
-            historico_tramitacao = f'Data: {data.day}-{data.month}-{data.year}\n' \
-                                   f'Localizacao: estante_{codigo_estante}-caixa_{codigo_caixa}'
-
             df = pd.DataFrame({'protocolo': [documento.get_protocolo()],
                                'cod_cx': [codigo_caixa],
                                'assunto': [documento.get_assunto()],
                                'partes interessadas': [documento.get_partes_interessadas()],
                                'anexos': [' '],
-                               'historico de tramitacao': [historico_tramitacao]})
+                               'historico de tramitacao': [documento.get_historico_tramitacao()]})
 
             with open(f'data/arquivo/documento.csv', encoding='utf-8') as fin:
                 print(f'estante {codigo_estante}\ncaixa {codigo_caixa}')
@@ -85,33 +80,41 @@ class GerenciadorDocumentos:
         except Exception as e:
             raise Exception(f'Erro ao atualizar banco de dados: {e}')
 
-    def pesquisar(self, opcao: str, dado_pesquisa: str):
+    @staticmethod
+    def atualizar_csv_tramitar(d1, d2, ht_d1, novos_anexos_d1, novos_anexos_d2):
+        df = pd.read_csv(f'data/arquivo/documento.csv', encoding='utf-8')
+
+        df.loc[df['protocolo'].astype(str) == d1.get_protocolo(), df['historico de tramitacao']] += ht_d1
+        list(df.loc[df['protocolo'].astype(str) == d1.get_protocolo(), df['anexos']]).append(novos_anexos_d1)
+        list(df.loc[df['protocolo'].astype(str) == d2.get_protocolo(), df['anexos']]).append(novos_anexos_d2)
+
+    def pesquisar(self, forma_pesquisa, dado_pesquisado):
         lista_documentos = []
 
-        if opcao == 'Partes Interessadas':
+        if forma_pesquisa == 'partes interessadas':
             for documento in self.documentos:
-                if dado_pesquisa in documento.get_partes_interessadas():
+                if dado_pesquisado in documento.get_partes_interessadas():
                     lista_documentos.append(documento)
 
-        elif opcao == 'Data de Insercao':
-            d = dado_pesquisa.split('-')
+        elif forma_pesquisa == 'data de insercao':
+            d = dado_pesquisado.split('-')
             if d[0][0] == '0':
-                dado_pesquisa = f'{d[0][1]}-{d[1]}-{d[2]}'
+                dado_pesquisado = f'{d[0][1]}-{d[1]}-{d[2]}'
             if d[1][0] == '0':
-                dado_pesquisa = f'{d[0]}-{d[1][1]}-{d[2]}'
+                dado_pesquisado = f'{d[0]}-{d[1][1]}-{d[2]}'
             for documento in self.documentos:
                 for line in documento.get_historico_tramitacao():
-                    if f'Inserção: {dado_pesquisa}' in line:
+                    if f'Inserção: {dado_pesquisado}' in line:
                         lista_documentos.append(documento)
 
-        elif opcao == 'Assunto':
+        elif forma_pesquisa == 'assunto':
             for documento in self.documentos:
-                if dado_pesquisa in documento.get_assunto():
+                if dado_pesquisado in documento.get_assunto():
                     lista_documentos.append(documento)
 
-        elif opcao == 'Protocolo':
+        elif forma_pesquisa == 'protocolo':
             for documento in self.documentos:
-                if dado_pesquisa in documento.get_protocolo():
+                if dado_pesquisado in documento.get_protocolo():
                     lista_documentos.append(documento)
 
         if not lista_documentos:

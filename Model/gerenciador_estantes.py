@@ -10,7 +10,7 @@ class GerenciadorEstantes:
     def adicionar(self, codigo, disponibilidade):
         try:
             if not self.existe_estante(codigo):
-                self.atualizar_banco_dados(codigo, disponibilidade)
+                self.atualizar_csv_adicionar(codigo, disponibilidade)
                 self.estantes.append(est.Estante(codigo, disponibilidade))
             else:
                 raise Exception('Estante ja existente!')
@@ -29,20 +29,19 @@ class GerenciadorEstantes:
             return True
         return False
 
-    def atualizar_disponibilidade(self, codigo):
+    def atualizar_csv_disponibilidade(self, codigo):
         disponibilidade = int()
         for estante in self.estantes:
             if str(estante.get_codigo()) == str(codigo):
                 disponibilidade = int(estante.get_disponibilidade())
                 estante.set_disponibilidade(disponibilidade - 1)
 
-        # TODO
         df = pd.read_csv('data/arquivo/estante.csv', encoding='utf-8')
         df.loc[df['cod'].astype(str) == str(codigo), ['disponibilidade']] = disponibilidade - 1
         df.to_csv('data/arquivo/estante.csv', index=False, encoding='utf-8')
 
     @staticmethod
-    def atualizar_banco_dados(codigo, disponibilidade):
+    def atualizar_csv_adicionar(codigo, disponibilidade):
         try:
             df = pd.DataFrame({'cod': [codigo],
                                'disponibilidade': [disponibilidade]})

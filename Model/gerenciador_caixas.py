@@ -17,7 +17,7 @@ class GerenciadorCaixas:
                 pass
 
             if type(usuario) is administrador.Administrador:
-                self.atualizar_banco_dados(codigo, codigo_estante)
+                self.atualizar_csv_adicionar(codigo, codigo_estante)
                 self.caixas.append(cx.Caixa(codigo, codigo_estante))
             else:
                 nome_admin = str(input('Autorizacao do administrador:\nUsuario: '))
@@ -33,7 +33,7 @@ class GerenciadorCaixas:
             raise e
 
     @staticmethod
-    def atualizar_banco_dados(codigo, codigo_estante):
+    def atualizar_csv_adicionar(codigo, codigo_estante):
         try:
             df = pd.DataFrame({'cod': [codigo],
                                'cod_est': [codigo_estante]})
@@ -57,6 +57,6 @@ class GerenciadorCaixas:
 
     def get_caixa(self, codigo):
         for caixa in self.caixas:
-            if codigo == caixa.get_codigo():
+            if str(codigo) == str(caixa.get_codigo()):
                 return caixa
         raise Exception('Caixa não encontrada!')
