@@ -14,7 +14,7 @@ class Arquivo:
 
         for table in tables:
             if not os.path.exists(f'data/arquivo/{table}.csv'):
-                os.mknod(f'data/arquivo/{table}.csv')
+                open(f'data/arquivo/{table}.csv', 'x').close()
 
             with open(f'data/arquivo/{table}.csv') as fin:
                 if not fin.read():

@@ -1,6 +1,4 @@
-from Model import estante as est, documento as doc, caixa as cx
-import os
-import pandas as pd
+from Model import documento as doc
 
 
 class GerenciadorDocumentos:
@@ -33,30 +31,9 @@ class GerenciadorDocumentos:
 
         return protocolo1, protocolo2
 
-    # @staticmethod
-    # def listar():
-    #     """
-    #     Lista todos os documentos de uma dada caixa do arquivo
-    #     """
-    #     codigo_estante = str(input('Codigo da estante: '))
-    #     codigo_caixa = str(input('Codigo da caixa: '))
-    #     if not estante.Estante(codigo_estante).existe_estante():
-    #         raise Exception('Estante nao existente')
-    #     if f'{codigo_caixa}.csv' not in os.listdir(f'data/arquivo/{codigo_estante}'):
-    #         raise Exception('Caixa nao existente')
-    #
-    #     print('*'*20)
-    #     print(f'Documentos [Estante: {codigo_estante}; Caixa: {codigo_caixa}]')
-    #
-    #     df = pd.read_csv(f'data/arquivo/{codigo_estante}/{codigo_caixa}.csv', encoding='utf-8')
-    #     for index, row in df.iterrows():
-    #         print('*' * 20)
-    #         print(f'assunto: {row["assunto"]}')
-    #         print(f'partes interessadas: {row["partes interessadas"]}')
-    #         print(f'protocolo: {row["protocolo"]}')
-    #         print(f'anexos: {row["anexos"][:-1]}')
-    #         print(f'Historico de Tramitacao: {row["Historico de Tramitacao"]}')
-    #     print('*' * 20)
+    @staticmethod
+    def listar_documentos_caixa():
+        return str(input('Codigo da caixa: '))
 
     @staticmethod
     def pesquisar():
@@ -85,14 +62,10 @@ class GerenciadorDocumentos:
         else:
             raise Exception('Opcao nao existente')
 
-    # @staticmethod
-    # def tramitar(usuario):
-    #     print('*' * 20)
-    #     doc = documento.Documento().pesquisar('protocolo', str(input('protocolo do documento a ser tramitado: ')))[0]
-    #     print('Localização de destino:')
-    #     estante_destino = str(input('Estante: '))
-    #     destino_caixa = str(input('Caixa: '))
-    #     motivo = str(input('Motivo da tramitação: '))
-    #
-    #     cx = caixa.Caixa(estante.Estante(estante_destino), destino_caixa)
-    #     doc.tramitar(cx, motivo, usuario)
+    @staticmethod
+    def tramitar():
+        print('*' * 20)
+        protocolo = str(input('Protocolo do documento: '))
+        codigo_caixa = str(input('Codigo da caixa destino: '))
+        motivo = str(input('Motivo da tramitacao: '))
+        return protocolo, codigo_caixa, motivo

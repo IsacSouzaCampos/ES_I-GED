@@ -20,11 +20,11 @@ def main():
             elif opcao == 4:
                 anexar_documentos()
             elif opcao == 5:
-                pass
+                listar_documentos_caixa()
             elif opcao == 6:
                 pesquisar_documento()
             elif opcao == 7:
-                pass
+                tramitar()
         except Exception as e:
             print(e)
 
@@ -68,13 +68,20 @@ def adicionar_documento():
 
 def anexar_documentos():
     protocolo1, protocolo2 = gdv.GerenciadorDocumentos().anexar()
-    documento1 = ger_doc.pesquisar('protocolo', protocolo1)
-    documento2 = ger_doc.pesquisar('protocolo', protocolo2)
-    ger_doc.anexar(documento1, documento2, usuario.get_nome())
+    documento1 = ger_doc.pesquisar('protocolo', protocolo1)[0]
+    documento2 = ger_doc.pesquisar('protocolo', protocolo2)[0]
+    caixa_d2 = ger_cx.get_caixa(documento2.get_codigo_caixa())
+    codigo_estante_d2 = caixa_d2.get_codigo_estante()
+    ger_doc.anexar(documento1, documento2, codigo_estante_d2, usuario.get_nome())
 
 
 def listar_documentos_caixa():
-    pass
+    codigo_caixa = gdv.GerenciadorDocumentos().listar_documentos_caixa()
+    documentos = ger_doc.listar_documentos_caixa(codigo_caixa)
+    for documento in documentos:
+        caixa = ger_cx.get_caixa(documento.get_codigo_caixa())
+        codigo_estante = caixa.get_codigo_estante()
+        documento.imprimir(codigo_estante)
 
 
 def pesquisar_documento():
@@ -86,7 +93,10 @@ def pesquisar_documento():
 
 
 def tramitar():
-    pass
+    protocolo, codigo_caixa, motivo = gdv.GerenciadorDocumentos().tramitar()
+    caixa = ger_cx.get_caixa(codigo_caixa)
+    codigo_estante = caixa.get_codigo_estante()
+    ger_doc.tramitar(protocolo, codigo_caixa, codigo_estante, motivo, usuario.get_nome())
 
 
 if __name__ == '__main__':
