@@ -67,7 +67,9 @@ def adicionar_documento():
 
 
 def anexar_documentos():
-    protocolo1, protocolo2 = gdv.GerenciadorDocumentos().anexar()
+    # protocolo1, protocolo2 = gdv.GerenciadorDocumentos().anexar()
+    protocolo1 = '0'
+    protocolo2 = '1'
     documento1 = ger_doc.pesquisar('protocolo', protocolo1)[0]
     documento2 = ger_doc.pesquisar('protocolo', protocolo2)[0]
     caixa_d2 = ger_cx.get_caixa(documento2.get_codigo_caixa())

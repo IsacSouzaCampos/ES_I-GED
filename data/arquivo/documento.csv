@@ -1,19 +1,13 @@
-protocolo,cod_cx,assunto,partes interessadas,anexos,historico de tramitacao,"Insercao: 28-11-2020
-Localizacao: estante_1-caixa_1","Insercao: 28-11-2020
-Localizacao: estante_0-caixa_0", 
-1,1,1,['1'], ,"Insercao: 28-11-2020
-Localizacao: estante_1-caixa_1",,,
-0,0,0,['0'], ,"Insercao: 28-11-2020
-Localizacao: estante_0-caixa_0","Insercao: 28-11-2020
+protocolo,cod_cx,assunto,partes interessadas,anexos,historico
+1,0,1,0/1/,/0/,"Insercao: 29-11-2020
 Localizacao: estante_0-caixa_0
 *********
-Data: 28-11-2020
+Data: 29-11-2020
 Localizacao: estante_1-caixa_1
-Motivo: anexado ao documento 1
-Usuario: None","Insercao: 28-11-2020
+Motivo: recebeu 0 como anexo
+Usuario: None
+********************
+Data: 29-11-2020
 Localizacao: estante_0-caixa_0
-*********
-Data: 28-11-2020
-Localizacao: estante_1-caixa_1
-Motivo: anexado ao documento 1
-Usuario: None",
+Motivo: teste
+Usuario: None"

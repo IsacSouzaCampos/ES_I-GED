@@ -12,12 +12,12 @@ class GerenciadorDocumentos:
         partes_interessadas_temp = str(input('partes interessadas (ex.: nome1 sobrenome1, nome2 sobrenome2): '))
 
         partes_interessadas_temp = partes_interessadas_temp.split(',')
-        partes_interessadas = []
+        partes_interessadas = ''
         for p in partes_interessadas_temp:
             p = p.strip()
             while '  ' in p:
                 p = p.replace('  ', ' ')
-            partes_interessadas.append(p)
+            partes_interessadas += f'{p}/'
 
         documento = doc.Documento(protocolo, caixa, assunto, partes_interessadas, '')
 

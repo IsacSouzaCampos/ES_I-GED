@@ -29,6 +29,6 @@ class Arquivo:
                 else:
                     documentos.append(
                         doc.Documento(row['protocolo'], row['cod_cx'], row['assunto'], row['partes interessadas'],
-                                      row['historico de tramitacao'], row['anexos']))
+                                      row['historico'], row['anexos']))
 
         return ge.GerenciadorEstantes(estantes), gc.GerenciadorCaixas(caixas), gd.GerenciadorDocumentos(documentos)

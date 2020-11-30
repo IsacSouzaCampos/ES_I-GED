@@ -1,10 +1,10 @@
 class Documento:
-    def __init__(self, protocolo, codigo_caixa, assunto, partes_interessadas, historico_tramitacao, anexos=None):
+    def __init__(self, protocolo, codigo_caixa, assunto, partes_interessadas, historico, anexos=''):
         self.protocolo = protocolo
         self.codigo_caixa = codigo_caixa
         self.assunto = assunto
         self.partes_interessadas = partes_interessadas
-        self.historico_tramitacao = historico_tramitacao
+        self.historico = historico
         self.anexos = anexos
 
     def imprimir(self, codigo_estante=None):
@@ -16,7 +16,7 @@ class Documento:
         print(f'partes interessadas: {self.get_partes_interessadas()}')
         print(f'protocolo: {self.get_protocolo()}')
         print(f'anexos: {self.get_anexos()}')
-        print(f'Historico de Tramitacao: {self.get_historico_tramitacao()}')
+        print(f'historico: {self.get_historico()}')
         print('*' * 20)
 
     def get_codigo_caixa(self):
@@ -49,8 +49,8 @@ class Documento:
     def set_anexos(self, anexos):
         self.anexos = anexos
 
-    def get_historico_tramitacao(self):
-        return self.historico_tramitacao
+    def get_historico(self):
+        return self.historico
 
-    def set_historico_tramitacao(self, historico):
-        self.historico_tramitacao = historico
+    def set_historico(self, historico):
+        self.historico = historico
