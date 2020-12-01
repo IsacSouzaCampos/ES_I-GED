@@ -25,7 +25,9 @@ class GerenciadorDocumentos:
     def anexar(self, d1, d2, codigo_estante_d2, nome_usuario):
         try:
             documento_mais_antigo = self.documento_mais_antigo(d1, d2)
-            if documento_mais_antigo.get_protocolo() == d1.get_protocolo():
+            protocolo_doc_mais_antigo = documento_mais_antigo.get_protocolo()
+            protocolo_d1 = d1.get_protocolo()
+            if protocolo_doc_mais_antigo == protocolo_d1:
                 index = self.documentos.index(d2)
                 del(self.documentos[index])
                 documento_remover = d2
@@ -120,12 +122,12 @@ class GerenciadorDocumentos:
                                      f'\nLocalizacao: estante_{codigo_estante}-caixa_{codigo_caixa}' \
                                      f'\nMotivo: {motivo}' \
                                      f'\nUsuario: {nome_usuario}'
-        doc.set_codigo_caixa(codigo_caixa)
         doc.set_historico(historico)
         self.atualizar_csv_tramitar(doc)
 
         for documento in self.documentos:
-            if documento.get_protocolo() == protocolo:
+            protocolo_doc = documento.get_protocolo()
+            if protocolo_doc == protocolo:
                 index = self.documentos.index(documento)
                 del(self.documentos[index])
                 self.documentos.append(doc)
@@ -212,7 +214,8 @@ class GerenciadorDocumentos:
                                           'anexos': [documento_alterar.get_anexos()],
                                           'historico': [documento_alterar.get_historico()]})
 
-        pd.concat([df, df_novo_documento]).to_csv('data/arquivo/documento.csv', index=False, encoding='utf-8')
+        df_resultado = pd.concat([df, df_novo_documento])
+        df_resultado.to_csv('data/arquivo/documento.csv', index=False, encoding='utf-8')
 
     @staticmethod
     def atualizar_csv_tramitar(doc):
@@ -227,4 +230,5 @@ class GerenciadorDocumentos:
                                 'anexos': [doc.get_anexos()],
                                 'historico': [doc.get_historico()]})
 
-        pd.concat([df, df_novo]).to_csv('data/arquivo/documento.csv', index=False, encoding='utf-8')
+        df_resultado = pd.concat([df, df_novo])
+        df_resultado.to_csv('data/arquivo/documento.csv', index=False, encoding='utf-8')

@@ -5,13 +5,13 @@ from Model import arquivo as arq, administrador, documento as doc
 usuario = administrador.Administrador()
 ger_est, ger_cx, ger_doc = arq.Arquivo().carregar_arquivo()
 
-# for i in range(3):
-#     ger_est.adicionar(str(i), 15)
-#     for j in range(3):
-#         ger_cx.adicionar(str(j + (i * 3)), str(i), usuario)
-#         for k in range(3):
-#             s = str(k + ((j + (i * 3)) * 3))
-#             ger_doc.adicionar(doc.Documento(s, str(j + (i * 3)), s, s, '', ''), str(i))
+for i in range(3):
+    ger_est.adicionar(str(i), 15)
+    for j in range(3):
+        ger_cx.adicionar(str(j + (i * 3)), str(i), usuario)
+        for k in range(3):
+            s = str(k + ((j + (i * 3)) * 3))
+            ger_doc.adicionar(doc.Documento(s, str(j + (i * 3)), s, s, '', ''), str(i))
 
 
 def main():
@@ -78,9 +78,11 @@ def anexar_documentos():
     protocolo1, protocolo2 = gdv.GerenciadorDocumentos().anexar()
     documento1 = ger_doc.pesquisar('protocolo', protocolo1)[0]
     documento2 = ger_doc.pesquisar('protocolo', protocolo2)[0]
-    caixa_d2 = ger_cx.get_caixa(documento2.get_codigo_caixa())
+    codigo_caixa_d2 = documento2.get_codigo_caixa()
+    caixa_d2 = ger_cx.get_caixa(codigo_caixa_d2)
     codigo_estante_d2 = caixa_d2.get_codigo_estante()
-    ger_doc.anexar(documento1, documento2, codigo_estante_d2, usuario.get_nome())
+    nome_usuario = usuario.get_nome()
+    ger_doc.anexar(documento1, documento2, codigo_estante_d2, nome_usuario)
 
 
 def listar_documentos_caixa():
@@ -104,7 +106,8 @@ def tramitar():
     protocolo, codigo_caixa, motivo = gdv.GerenciadorDocumentos().tramitar()
     caixa = ger_cx.get_caixa(codigo_caixa)
     codigo_estante = caixa.get_codigo_estante()
-    ger_doc.tramitar(protocolo, codigo_caixa, codigo_estante, motivo, usuario.get_nome())
+    nome_usuario = usuario.get_nome()
+    ger_doc.tramitar(protocolo, codigo_caixa, codigo_estante, motivo, nome_usuario)
 
 
 if __name__ == '__main__':
