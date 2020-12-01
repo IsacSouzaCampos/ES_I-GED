@@ -10,33 +10,33 @@ class GerenciadorCaixas:
 
     def adicionar(self, codigo, codigo_estante, usuario):
         try:
-            try:
-                if self.existe_caixa(codigo):
-                    Exception('Caixa já existente!')
-            except:
-                pass
+            if self.existe_caixa(codigo):
+                raise Exception('Caixa já existente!')
+
+            caixa = cx.Caixa(codigo, codigo_estante)
 
             if type(usuario) is administrador.Administrador:
-                self.atualizar_csv_adicionar(codigo, codigo_estante)
-                self.caixas.append(cx.Caixa(codigo, codigo_estante))
+                self.atualizar_csv_adicionar(caixa)
+                self.caixas.append(caixa)
             else:
                 nome_admin = str(input('Autorizacao do administrador:\nUsuario: '))
                 senha_admin = getpass.getpass('Senha: ').encode()
 
                 admin = login.LogIn().verificar_hierarquia(nome_admin, senha_admin)
                 if type(admin) is administrador.Administrador:
-                    self.atualizar_banco_dados(codigo, codigo_estante)
+                    self.atualizar_csv_adicionar(caixa)
+                    self.caixas.append(caixa)
                 else:
-                    raise Exception(f'Erro ao inserir a caixa {self.get_codigo()} no arquivo!')
+                    raise Exception(f'Erro ao inserir a caixa {codigo} no arquivo!')
 
         except Exception as e:
             raise e
 
     @staticmethod
-    def atualizar_csv_adicionar(codigo, codigo_estante):
+    def atualizar_csv_adicionar(caixa):
         try:
-            df = pd.DataFrame({'cod': [codigo],
-                               'cod_est': [codigo_estante]})
+            df = pd.DataFrame({'cod': [caixa.get_codigo()],
+                               'cod_est': [caixa.get_codigo_estante()]})
 
             with open(f'data/arquivo/caixa.csv', encoding='utf-8') as fin:
                 if not fin.read():

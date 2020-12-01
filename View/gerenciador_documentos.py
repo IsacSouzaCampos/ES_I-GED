@@ -26,8 +26,8 @@ class GerenciadorDocumentos:
     @staticmethod
     def anexar():
         print('*'*20)
-        protocolo1 = str(input('protocolo do documento a ser anexado: '))
-        protocolo2 = str(input('protocolo do documento a receber o anexo: '))
+        protocolo1 = str(input('protocolo do documento 1: '))
+        protocolo2 = str(input('protocolo do documento 2: '))
 
         return protocolo1, protocolo2
 

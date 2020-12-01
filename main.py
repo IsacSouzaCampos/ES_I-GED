@@ -1,9 +1,17 @@
 from View import login, gerenciador_caixas as gcv, gerenciador_documentos as gdv, gerenciador_estantes as gev
-from Model import arquivo as arq, administrador
+from Model import arquivo as arq, administrador, documento as doc
 
 
 usuario = administrador.Administrador()
 ger_est, ger_cx, ger_doc = arq.Arquivo().carregar_arquivo()
+
+# for i in range(3):
+#     ger_est.adicionar(str(i), 15)
+#     for j in range(3):
+#         ger_cx.adicionar(str(j + (i * 3)), str(i), usuario)
+#         for k in range(3):
+#             s = str(k + ((j + (i * 3)) * 3))
+#             ger_doc.adicionar(doc.Documento(s, str(j + (i * 3)), s, s, '', ''), str(i))
 
 
 def main():
@@ -67,9 +75,7 @@ def adicionar_documento():
 
 
 def anexar_documentos():
-    # protocolo1, protocolo2 = gdv.GerenciadorDocumentos().anexar()
-    protocolo1 = '0'
-    protocolo2 = '1'
+    protocolo1, protocolo2 = gdv.GerenciadorDocumentos().anexar()
     documento1 = ger_doc.pesquisar('protocolo', protocolo1)[0]
     documento2 = ger_doc.pesquisar('protocolo', protocolo2)[0]
     caixa_d2 = ger_cx.get_caixa(documento2.get_codigo_caixa())

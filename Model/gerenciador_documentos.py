@@ -39,14 +39,13 @@ class GerenciadorDocumentos:
             data = date.today()
             data_atual = f'{data.day}-{data.month}-{data.year}'
             nova_localizacao = f'estante_{codigo_estante_d2}-caixa_{d2.get_codigo_caixa()}'
-            motivo = f'recebeu {documento_remover.get_protocolo()} como anexo'
+            motivo = f'anexado ao documento "{documento_remover.get_assunto()}"'
 
             historico = d1.get_historico()
             historico += f'\n*********\nData: {data_atual}\nLocalizacao: {nova_localizacao}\nMotivo: ' \
                          f'{motivo}\nUsuario: {nome_usuario}'
 
             anexos = f'{d2.get_anexos()}/{d1.get_anexos()}/{d1.get_protocolo()}/'.replace(' ', '').replace('//', '/')
-            print(f'anexos = {anexos}')
 
             partes_interessadas = ''
             for pi in d1.get_partes_interessadas().split('/'):
@@ -54,7 +53,6 @@ class GerenciadorDocumentos:
             for pi in d2.get_partes_interessadas().split('/'):
                 partes_interessadas += f'{pi}/'
             partes_interessadas = partes_interessadas.replace(' ', '').replace('//', '/')
-            print(f'partes interessadas: {partes_interessadas}')
 
             documento_alterar.set_codigo_caixa(d2.get_codigo_caixa())
             documento_alterar.set_partes_interessadas(partes_interessadas)
@@ -94,7 +92,7 @@ class GerenciadorDocumentos:
 
         elif forma_pesquisa == 'protocolo':
             for documento in self.documentos:
-                if dado_pesquisado in str(documento.get_protocolo()):
+                if dado_pesquisado == str(documento.get_protocolo()):
                     lista_documentos.append(documento)
                     break
 
