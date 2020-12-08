@@ -2,9 +2,16 @@ import os
 
 
 class Caixa:
-    def __init__(self, codigo, estante=None):
+    def __init__(self, codigo, estante=None, documentos=[]):
         self.codigo = codigo
         self.estante = estante
+        self.documentos = documentos
+
+    def adicionar_documento(self, documento):
+        self.documentos.append(documento)
+
+    def numero_documentos(self):
+        return len(self.documentos)
 
     def get_estante(self):
         return self.estante
@@ -17,3 +24,9 @@ class Caixa:
 
     def set_codigo(self, codigo):
         self.codigo = codigo
+
+    def get_documentos(self):
+        return self.documentos
+
+    def set_documentos(self, documentos):
+        self.documentos = documentos

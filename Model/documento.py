@@ -1,5 +1,5 @@
 class Documento:
-    def __init__(self, protocolo, caixa, assunto, partes_interessadas, historico, anexos=''):
+    def __init__(self, protocolo, caixa=None, assunto='', partes_interessadas='', historico='', anexos=''):
         self.protocolo = protocolo
         self.caixa = caixa
         self.assunto = assunto

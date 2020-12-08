@@ -1,7 +1,7 @@
 from Model import estante
 
 
-class GerendiadorCaixas:
+class InterfaceUsuarioCaixas:
     @staticmethod
     def adicionar():
         try:
@@ -13,3 +13,7 @@ class GerendiadorCaixas:
 
         except Exception as e:
             raise e
+
+    @staticmethod
+    def remover():
+        return str(input('Código da caixa: '))

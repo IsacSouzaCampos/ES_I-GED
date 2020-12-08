@@ -1,7 +1,7 @@
 from Model import documento as doc
 
 
-class GerenciadorDocumentos:
+class InterfaceUsuarioDocumentos:
     @staticmethod
     def adicionar():
         print('='*20)
@@ -20,6 +20,10 @@ class GerenciadorDocumentos:
             partes_interessadas += f'{p}/'
 
         return protocolo, codigo_caixa, assunto, partes_interessadas, ''
+
+    @staticmethod
+    def remover():
+        return str(input('Protocolo: '))
 
     @staticmethod
     def anexar():

@@ -1,7 +1,7 @@
 import getpass
 import pandas as pd
 
-from Model import administrador, login, caixa as cx
+from Model import administrador, login
 
 
 class GerenciadorCaixas:
@@ -30,6 +30,38 @@ class GerenciadorCaixas:
         except Exception as e:
             raise e
 
+    def remover(self, caixa, usuario):
+        if caixa.numero_documentos() > 0:
+            print(f'numero de documentos = {caixa.numero_documentos()}')
+            raise Exception('A caixa precisa estar vazia para ser removida!')
+        if type(usuario) is not administrador.Administrador:
+            print('Autorização do Administrador:')
+            nome_admin = str(input('Usuario: '))
+            senha_admin = getpass.getpass('Senha: ').encode()
+            if type(login.LogIn().verificar_hierarquia(nome_admin, senha_admin)) is not administrador.Administrador:
+                raise Exception('Informações de administrador incorretas!')
+        self.atualizar_csv_remover(caixa)
+        index = self.caixas.index(caixa)
+        print(f'index = {index}')
+        del (self.caixas[index])
+        print('Caixa removida com êxito!')
+
+    def remover_documento_de_caixa(self, documento):
+        temp = None
+        for caixa in self.caixas:
+            for _documento in caixa.documentos:
+                if documento == _documento:
+                    index = self.caixas.index(caixa)
+                    temp = caixa
+                    del(self.caixas[index])
+
+        docs = temp.get_documentos()
+        index = docs.index(documento)
+        del(docs[index])
+        temp.set_documentos(docs)
+
+        self.caixas.append(temp)
+
     @staticmethod
     def atualizar_csv_adicionar(caixa):
         try:
@@ -45,6 +77,15 @@ class GerenciadorCaixas:
 
         except Exception as e:
             raise Exception(f'Erro ao atualizar o banco de dados: {e}')
+
+    @staticmethod
+    def atualizar_csv_remover(caixa):
+        df = pd.read_csv('data/arquivo/caixa.csv', encoding='utf-8')
+        item = df.loc[df['cod'].astype(str) == str(caixa.get_codigo())]
+        df = df.drop(item.index)
+        print(df)
+
+        df.to_csv('data/arquivo/caixa.csv', index=False, encoding='utf-8')
 
     def existe_caixa(self, codigo):
         try:

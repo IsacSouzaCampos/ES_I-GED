@@ -1,5 +1,8 @@
 import pandas as pd
 from datetime import date
+import getpass
+
+from Model import administrador, login
 
 
 class GerenciadorDocumentos:
@@ -21,7 +24,17 @@ class GerenciadorDocumentos:
         except Exception as e:
             raise Exception(e)
 
-        print('Finalizado')
+    def remover(self, documento, usuario):
+        if type(usuario) is not administrador.Administrador:
+            print('Autorização do Administrador:')
+            nome_admin = str(input('Usuario: '))
+            senha_admin = getpass.getpass('Senha: ').encode()
+            if type(login.LogIn().verificar_hierarquia(nome_admin, senha_admin)) is not administrador.Administrador:
+                raise Exception('Informações de administrador incorretas!')
+        self.atualizar_csv_remover(documento)
+        index = self.documentos.index(documento)
+        del (self.documentos[index])
+        print('Documento removido com êxito!')
 
     def anexar(self, d1, d2, codigo_estante_d2, nome_usuario):
         try:
@@ -200,6 +213,14 @@ class GerenciadorDocumentos:
 
         except Exception as e:
             raise Exception(f'Erro ao atualizar banco de dados: {e}')
+
+    @staticmethod
+    def atualizar_csv_remover(documento):
+        df = pd.read_csv('data/arquivo/documento.csv', encoding='utf-8')
+        item = df.loc[df['protocolo'].astype(str) == str(documento.get_protocolo())]
+        df = df.drop(item.index)
+
+        df.to_csv('data/arquivo/documento.csv', index=False, encoding='utf-8')
 
     def atualizar_csv_anexar(self, documento_remover, documento_alterar):
         df = pd.read_csv('data/arquivo/documento.csv', encoding='utf-8')

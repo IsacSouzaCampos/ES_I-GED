@@ -1,11 +1,17 @@
+from builtins import staticmethod
+
+
 class Estante:
-    def __init__(self, codigo, disponibilidade, caixas=None):
+    def __init__(self, codigo, disponibilidade, caixas=[]):
         self.codigo = codigo
         self.disponibilidade = disponibilidade
         self.caixas = caixas
 
     def adicionar_caixa(self, caixa):
         self.caixas.append(caixa)
+
+    def numero_caixas(self):
+        return len(self.caixas)
 
     def get_codigo(self):
         return self.codigo
