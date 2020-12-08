@@ -20,9 +20,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2ebf7468-2029-498b-807a-beeb04c82052" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/View/gerenciador_caixas.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/interface_usuario_caixas.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/gerenciador_documentos.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/interface_usuario_documentos.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/gerenciador_estantes.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/interface_usuario_estantes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/gerenciador_caixas.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/gerenciador_caixas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/gerenciador_documentos.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/gerenciador_documentos.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/gerenciador_estantes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/gerenciador_estantes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/interface_usuario_caixas.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/interface_usuario_caixas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/interface_usuario_documentos.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/interface_usuario_documentos.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/interface_usuario_estantes.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/interface_usuario_estantes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/arquivo/caixa.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/arquivo/caixa.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/arquivo/documento.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/arquivo/documento.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/arquivo/estante.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/arquivo/estante.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

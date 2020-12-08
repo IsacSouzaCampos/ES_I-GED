@@ -1,5 +1,8 @@
 import pandas as pd
 from datetime import date
+import getpass
+
+from Model import login, administrador
 
 
 class GerenciadorDocumentos:
@@ -22,6 +25,18 @@ class GerenciadorDocumentos:
             raise Exception(e)
 
         print('Finalizado')
+
+    def remover(self, documento, usuario):
+        if type(usuario) is not administrador.Administrador:
+            print('Autorização do Administrador:')
+            nome_admin = str(input('Usuario: '))
+            senha_admin = getpass.getpass('Senha: ').encode()
+            if type(login.LogIn().verificar_hierarquia(nome_admin, senha_admin)) is not administrador.Administrador:
+                raise Exception('Informações de administrador incorretas!')
+        self.atualizar_csv_remover(documento)
+        index = self.documentos.index(documento)
+        del (self.documentos[index])
+        print('Documento removido com êxito!')
 
     def anexar(self, d1, d2, codigo_estante_d2, nome_usuario):
         try:
@@ -111,6 +126,8 @@ class GerenciadorDocumentos:
             if str(documento.get_caixa().get_codigo()) == codigo_caixa:
                 lista_documentos.append(documento)
 
+        if not lista_documentos:
+            raise Exception('Caixa vazia!')
         return lista_documentos
 
     def tramitar(self, protocolo, caixa, estante, motivo, nome_usuario):
@@ -201,6 +218,14 @@ class GerenciadorDocumentos:
         except Exception as e:
             raise Exception(f'Erro ao atualizar banco de dados: {e}')
 
+    @staticmethod
+    def atualizar_csv_remover(documento):
+        df = pd.read_csv('data/arquivo/documento.csv', encoding='utf-8')
+        item = df.loc[df['protocolo'].astype(str) == str(documento.get_protocolo())]
+        df = df.drop(item.index)
+
+        df.to_csv('data/arquivo/documento.csv', index=False, encoding='utf-8')
+
     def atualizar_csv_anexar(self, documento_remover, documento_alterar):
         df = pd.read_csv('data/arquivo/documento.csv', encoding='utf-8')
         item = df.loc[df['protocolo'].astype(str) == str(documento_remover.get_protocolo())]
@@ -221,7 +246,7 @@ class GerenciadorDocumentos:
     @staticmethod
     def atualizar_csv_tramitar(doc):
         df = pd.read_csv('data/arquivo/documento.csv', encoding='utf-8')
-        item = df.loc[df['protocolo'].astype(str) == doc.get_protocolo()]
+        item = df.loc[df['protocolo'].astype(str) == str(doc.get_protocolo())]
         df = df.drop(item.index)
 
         df_novo = pd.DataFrame({'protocolo': [doc.get_protocolo()],

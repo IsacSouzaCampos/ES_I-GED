@@ -22,3 +22,7 @@ class InterfaceUsuarioEstantes:
 
         except Exception as e:
             raise e
+
+    @staticmethod
+    def remover():
+        return str(input('Código da estante: '))

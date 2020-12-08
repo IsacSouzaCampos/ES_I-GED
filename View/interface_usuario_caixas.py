@@ -1,16 +1,13 @@
-from Model import gerenciador_estantes
-ger_est = gerenciador_estantes.GerenciadorEstantes()
-
-
 class InterfaceUsuarioCaixas:
     @staticmethod
     def adicionar():
-        try:
-            codigo_estante = str(input('Código da estante: '))
-            if ger_est.existe_estante(codigo_estante):
-                return str(input('Codigo da caixa: ')), codigo_estante
-            else:
-                raise Exception('Estante não encontrada!')
+        codigo_estante = str(input('Código da estante: '))
+        return str(input('Codigo da caixa: ')), codigo_estante
 
-        except Exception as e:
-            raise e
+    @staticmethod
+    def remover():
+        return str(input('Código da caixa: '))
+
+    @staticmethod
+    def mudar_localizacao_caixa():
+        return str(input('Código da caixa: ')), str(input('Nova estante: '))

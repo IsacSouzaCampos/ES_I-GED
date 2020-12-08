@@ -19,6 +19,10 @@ class InterfaceUsuarioDocumentos:
         return protocolo, codigo_caixa, assunto, partes_interessadas, ''
 
     @staticmethod
+    def remover():
+        return str(input('Protocolo: '))
+
+    @staticmethod
     def anexar():
         print('*'*20)
         protocolo1 = str(input('protocolo do documento 1: '))
