@@ -7,7 +7,7 @@ class GerenciadorDocumentos:
         print('='*20)
 
         protocolo = str(input('protocolo: '))
-        caixa = str(input('Codigo da Caixa: '))
+        codigo_caixa = str(input('Codigo da Caixa: '))
         assunto = str(input('assunto: '))
         partes_interessadas_temp = str(input('partes interessadas (ex.: nome1 sobrenome1, nome2 sobrenome2): '))
 
@@ -19,9 +19,7 @@ class GerenciadorDocumentos:
                 p = p.replace('  ', ' ')
             partes_interessadas += f'{p}/'
 
-        documento = doc.Documento(protocolo, caixa, assunto, partes_interessadas, '')
-
-        return documento
+        return protocolo, codigo_caixa, assunto, partes_interessadas, ''
 
     @staticmethod
     def anexar():

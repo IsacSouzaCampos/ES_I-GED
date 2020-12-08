@@ -1,7 +1,7 @@
 class Documento:
-    def __init__(self, protocolo, codigo_caixa, assunto, partes_interessadas, historico, anexos=''):
+    def __init__(self, protocolo, caixa, assunto, partes_interessadas, historico, anexos=''):
         self.protocolo = protocolo
-        self.codigo_caixa = codigo_caixa
+        self.caixa = caixa
         self.assunto = assunto
         self.partes_interessadas = partes_interessadas
         self.historico = historico
@@ -10,7 +10,7 @@ class Documento:
     def imprimir(self, codigo_estante=None):
         print('*'*20)
         print(f'Estante: {codigo_estante}  -   '
-              f'Caixa: {self.get_codigo_caixa()}')
+              f'Caixa: {self.get_caixa().get_codigo()}')
         print('*' * 20)
         print(f'assunto: {self.get_assunto()}')
         print(f'partes interessadas: {self.get_partes_interessadas()}')
@@ -19,11 +19,11 @@ class Documento:
         print(f'historico: {self.get_historico()}')
         print('*' * 20)
 
-    def get_codigo_caixa(self):
-        return self.codigo_caixa
+    def get_caixa(self):
+        return self.caixa
 
-    def set_codigo_caixa(self, codigo_caixa):
-        self.codigo_caixa = codigo_caixa
+    def set_caixa(self, caixa):
+        self.caixa = caixa
 
     def get_assunto(self):
         return self.assunto

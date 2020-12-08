@@ -1,17 +1,22 @@
 from View import login, gerenciador_caixas as gcv, gerenciador_documentos as gdv, gerenciador_estantes as gev
-from Model import arquivo as arq, administrador, documento as doc
+from Model import arquivo as arq, administrador, estante as est, caixa as cx, documento as doc
 
+import os
+
+# os.system('rm data/arquivo/*.csv')
 
 usuario = administrador.Administrador()
 ger_est, ger_cx, ger_doc = arq.Arquivo().carregar_arquivo()
 
-for i in range(3):
-    ger_est.adicionar(str(i), 15)
-    for j in range(3):
-        ger_cx.adicionar(str(j + (i * 3)), str(i), usuario)
-        for k in range(3):
-            s = str(k + ((j + (i * 3)) * 3))
-            ger_doc.adicionar(doc.Documento(s, str(j + (i * 3)), s, s, '', ''), str(i))
+# for i in range(3):
+#     estante = est.Estante(str(i), 15)
+#     ger_est.adicionar(estante)
+#     for j in range(3):
+#         caixa = cx.Caixa(str(j + (i * 3)), estante)
+#         ger_cx.adicionar(caixa, usuario)
+#         for k in range(3):
+#             s = str(k + ((j + (i * 3)) * 3))
+#             ger_doc.adicionar(doc.Documento(s, caixa, s, s, '', ''))
 
 
 def main():
@@ -52,14 +57,18 @@ def mostrar_interface() -> int:
 
 def adicionar_estante():
     codigo, disponibilidade = gev.GerenciadorEstantes().adicionar(usuario)
-    ger_est.adicionar(codigo, disponibilidade)
+    estante = est.Estante(codigo, disponibilidade)
+    ger_est.adicionar(estante)
 
 
 def adicionar_caixa():
     codigo, codigo_estante = gcv.GerendiadorCaixas().adicionar()
     if ger_est.existe_estante(codigo_estante):
-        if ger_est.possui_disponibilidade(codigo_estante):
-            ger_cx.adicionar(codigo, codigo_estante, usuario)
+        estante = ger_est.get_estante(codigo_estante)
+        if int(estante.get_disponibilidade()) > 0:
+            caixa = cx.Caixa(codigo, estante)
+            ger_cx.adicionar(caixa, usuario)
+            ger_est.inserir_caixa_na_estante(estante, caixa)
             ger_est.atualizar_csv_disponibilidade(codigo_estante)
         else:
             print('Estante indisponivel no momento!')
@@ -68,19 +77,19 @@ def adicionar_caixa():
 
 
 def adicionar_documento():
-    documento = gdv.GerenciadorDocumentos().adicionar()
-    codigo_caixa = documento.get_codigo_caixa()
+    protocolo, codigo_caixa, assunto, partes_interessadas, historico = gdv.GerenciadorDocumentos().adicionar()
     caixa = ger_cx.get_caixa(codigo_caixa)
-    ger_doc.adicionar(documento, caixa.get_codigo_estante())
+    documento = doc.Documento(protocolo, caixa, assunto, partes_interessadas, historico)
+    ger_doc.adicionar(documento)
 
 
 def anexar_documentos():
     protocolo1, protocolo2 = gdv.GerenciadorDocumentos().anexar()
     documento1 = ger_doc.pesquisar('protocolo', protocolo1)[0]
     documento2 = ger_doc.pesquisar('protocolo', protocolo2)[0]
-    codigo_caixa_d2 = documento2.get_codigo_caixa()
+    codigo_caixa_d2 = documento2.get_caixa().get_codigo()
     caixa_d2 = ger_cx.get_caixa(codigo_caixa_d2)
-    codigo_estante_d2 = caixa_d2.get_codigo_estante()
+    codigo_estante_d2 = caixa_d2.get_estante().get_codigo()
     nome_usuario = usuario.get_nome()
     ger_doc.anexar(documento1, documento2, codigo_estante_d2, nome_usuario)
 
@@ -89,8 +98,8 @@ def listar_documentos_caixa():
     codigo_caixa = gdv.GerenciadorDocumentos().listar_documentos_caixa()
     documentos = ger_doc.listar_documentos_caixa(codigo_caixa)
     for documento in documentos:
-        caixa = ger_cx.get_caixa(documento.get_codigo_caixa())
-        codigo_estante = caixa.get_codigo_estante()
+        caixa = ger_cx.get_caixa(documento.get_caixa().get_codigo())
+        codigo_estante = caixa.get_estante().get_codigo()
         documento.imprimir(codigo_estante)
 
 
@@ -98,16 +107,16 @@ def pesquisar_documento():
     forma_pesquisa, dado_pesquisado = gdv.GerenciadorDocumentos().pesquisar()
     documentos = ger_doc.pesquisar(forma_pesquisa, dado_pesquisado)
     for documento in documentos:
-        codigo_estante = ger_cx.get_caixa(documento.get_codigo_caixa()).get_codigo_estante()
+        codigo_estante = documento.get_caixa().get_estante().get_codigo()
         documento.imprimir(codigo_estante)
 
 
 def tramitar():
     protocolo, codigo_caixa, motivo = gdv.GerenciadorDocumentos().tramitar()
     caixa = ger_cx.get_caixa(codigo_caixa)
-    codigo_estante = caixa.get_codigo_estante()
+    estante = caixa.get_estante()
     nome_usuario = usuario.get_nome()
-    ger_doc.tramitar(protocolo, codigo_caixa, codigo_estante, motivo, nome_usuario)
+    ger_doc.tramitar(protocolo, caixa, estante, motivo, nome_usuario)
 
 
 if __name__ == '__main__':

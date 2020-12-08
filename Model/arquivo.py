@@ -5,8 +5,7 @@ from Model import gerenciador_estantes as ge, gerenciador_caixas as gc, gerencia
 
 
 class Arquivo:
-    @staticmethod
-    def carregar_arquivo():
+    def carregar_arquivo(self):
         estantes = []
         caixas = []
         documentos = []
@@ -23,12 +22,39 @@ class Arquivo:
             df = pd.read_csv(f'data/arquivo/{table}.csv', encoding='utf-8')
             for index, row in df.iterrows():
                 if table == 'estante':
-                    estantes.append(est.Estante(row['cod'], row['disponibilidade']))
+                    cod = row['cod']
+                    disponibilidade = row['disponibilidade']
+                    estantes.append(self.carregar_estante(str(cod), int(disponibilidade)))
                 elif table == 'caixa':
-                    caixas.append(cx.Caixa(row['cod'], row['cod_est']))
+                    cod_est = row['cod_est'].astype(str)
+                    for estante in estantes:
+                        if cod_est == str(estante.get_codigo()):
+                            caixas.append(cx.Caixa(row['cod'].astype(str), estante))
+                            break
                 else:
-                    documentos.append(
-                        doc.Documento(row['protocolo'], row['cod_cx'], row['assunto'], row['partes interessadas'],
-                                      row['historico'], row['anexos']))
+                    cod_cx = row['cod_cx']
+                    for caixa in caixas:
+                        if str(cod_cx) == str(caixa.get_codigo()):
+                            documentos.append(
+                                doc.Documento(row['protocolo'], caixa, row['assunto'], row['partes interessadas'],
+                                              row['historico'], row['anexos']))
+                            break
 
         return ge.GerenciadorEstantes(estantes), gc.GerenciadorCaixas(caixas), gd.GerenciadorDocumentos(documentos)
+
+    @staticmethod
+    def carregar_estante(cod, disponibilidade):
+        estante = est.Estante(cod, disponibilidade)
+        with open('data/arquivo/caixa.csv', 'r') as fin:
+            if not fin.read():
+                return estante
+
+        df = pd.read_csv('data/arquivo/caixa.csv', encoding='utf-8')
+
+        caixas = []
+        for index, row in df.iterrows():
+            if row['cod_est'].astype(str) == cod:
+                caixa = cx.Caixa(row['cod'], estante)
+                caixas.append(caixa)
+        estante.set_caixas(caixas)
+        return estante

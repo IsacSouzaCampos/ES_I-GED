@@ -7,12 +7,11 @@ class GerenciadorEstantes:
     def __init__(self, estantes):
         self.estantes = estantes
 
-    def adicionar(self, codigo, disponibilidade):
+    def adicionar(self, estante):
         try:
-            if not self.existe_estante(codigo):
-                estante = est.Estante(codigo, disponibilidade)
+            if not self.existe_estante(estante.get_codigo()):
                 self.atualizar_csv_adicionar(estante)
-                self.estantes.append(est.Estante(codigo, disponibilidade))
+                self.estantes.append(estante)
             else:
                 raise Exception('Estante ja existente!')
         except Exception as e:
@@ -29,6 +28,16 @@ class GerenciadorEstantes:
         if int(self.get_estante(codigo).get_disponibilidade()) > 0:
             return True
         return False
+
+    def inserir_caixa_na_estante(self, estante, caixa):
+        for _estante in self.estantes:
+            if estante == _estante:
+                temp = _estante
+                index = self.estantes.index(_estante)
+                del(self.estantes[index])
+                break
+        temp.adicionar_caixa(caixa)
+        self.estantes.append(temp)
 
     def atualizar_csv_disponibilidade(self, codigo):
         disponibilidade = int()

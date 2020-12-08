@@ -6,11 +6,12 @@ class GerenciadorDocumentos:
     def __init__(self, documentos):
         self.documentos = documentos
 
-    def adicionar(self, documento, codigo_estante):
+    def adicionar(self, documento):
         if self.existe_documento(documento):
             raise Exception('O protocolo informado já existe no arquivo!')
 
-        codigo_caixa = documento.get_codigo_caixa()
+        codigo_caixa = documento.get_caixa().get_codigo()
+        codigo_estante = documento.get_caixa().get_estante().get_codigo()
         try:
             data = date.today()
             documento.set_historico(f'Insercao: {data.day}-{data.month}-{data.year}\n'
@@ -40,7 +41,7 @@ class GerenciadorDocumentos:
 
             data = date.today()
             data_atual = f'{data.day}-{data.month}-{data.year}'
-            nova_localizacao = f'estante_{codigo_estante_d2}-caixa_{d2.get_codigo_caixa()}'
+            nova_localizacao = f'estante_{codigo_estante_d2}-caixa_{d2.get_caixa().get_codigo()}'
             motivo = f'anexado ao documento "{documento_remover.get_assunto()}"'
 
             historico = d1.get_historico()
@@ -56,7 +57,7 @@ class GerenciadorDocumentos:
                 partes_interessadas += f'{pi}/'
             partes_interessadas = partes_interessadas.replace(' ', '').replace('//', '/')
 
-            documento_alterar.set_codigo_caixa(d2.get_codigo_caixa())
+            documento_alterar.set_caixa(d2.get_caixa())
             documento_alterar.set_partes_interessadas(partes_interessadas)
             documento_alterar.set_historico(historico)
             documento_alterar.set_anexos(anexos)
@@ -107,19 +108,19 @@ class GerenciadorDocumentos:
         lista_documentos = []
 
         for documento in self.documentos:
-            if str(documento.get_codigo_caixa()) == codigo_caixa:
+            if str(documento.get_caixa().get_codigo()) == codigo_caixa:
                 lista_documentos.append(documento)
 
         return lista_documentos
 
-    def tramitar(self, protocolo, codigo_caixa, codigo_estante, motivo, nome_usuario):
+    def tramitar(self, protocolo, caixa, estante, motivo, nome_usuario):
         data = date.today()
         doc = self.pesquisar('protocolo', protocolo)[0]
 
-        doc.set_codigo_caixa(codigo_caixa)
+        doc.set_caixa(caixa)
         historico = doc.get_historico()
         historico += '\n' + '*'*20 + f'\nData: {data.day}-{data.month}-{data.year}' \
-                                     f'\nLocalizacao: estante_{codigo_estante}-caixa_{codigo_caixa}' \
+                                     f'\nLocalizacao: estante_{estante.get_codigo()}-caixa_{caixa.get_codigo()}' \
                                      f'\nMotivo: {motivo}' \
                                      f'\nUsuario: {nome_usuario}'
         doc.set_historico(historico)
@@ -208,7 +209,7 @@ class GerenciadorDocumentos:
         df = df.drop(item.index)
 
         df_novo_documento = pd.DataFrame({'protocolo': [documento_alterar.get_protocolo()],
-                                          'cod_cx': [documento_alterar.get_codigo_caixa()],
+                                          'cod_cx': [documento_alterar.get_caixa().get_codigo()],
                                           'assunto': [documento_alterar.get_assunto()],
                                           'partes interessadas': [documento_alterar.get_partes_interessadas()],
                                           'anexos': [documento_alterar.get_anexos()],
@@ -224,7 +225,7 @@ class GerenciadorDocumentos:
         df = df.drop(item.index)
 
         df_novo = pd.DataFrame({'protocolo': [doc.get_protocolo()],
-                                'cod_cx': [doc.get_codigo_caixa()],
+                                'cod_cx': [doc.get_caixa().get_codigo()],
                                 'assunto': [doc.get_assunto()],
                                 'partes interessadas': [doc.get_partes_interessadas()],
                                 'anexos': [doc.get_anexos()],

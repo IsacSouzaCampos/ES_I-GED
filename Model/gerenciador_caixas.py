@@ -8,12 +8,10 @@ class GerenciadorCaixas:
     def __init__(self, caixas):
         self.caixas = caixas
 
-    def adicionar(self, codigo, codigo_estante, usuario):
+    def adicionar(self, caixa, usuario):
         try:
-            if self.existe_caixa(codigo):
+            if self.existe_caixa(caixa.get_codigo()):
                 raise Exception('Caixa já existente!')
-
-            caixa = cx.Caixa(codigo, codigo_estante)
 
             if type(usuario) is administrador.Administrador:
                 self.atualizar_csv_adicionar(caixa)
@@ -27,7 +25,7 @@ class GerenciadorCaixas:
                     self.atualizar_csv_adicionar(caixa)
                     self.caixas.append(caixa)
                 else:
-                    raise Exception(f'Erro ao inserir a caixa {codigo} no arquivo!')
+                    raise Exception(f'Erro ao inserir a caixa {caixa.get_codigo()} no arquivo!')
 
         except Exception as e:
             raise e
@@ -36,7 +34,7 @@ class GerenciadorCaixas:
     def atualizar_csv_adicionar(caixa):
         try:
             df = pd.DataFrame({'cod': [caixa.get_codigo()],
-                               'cod_est': [caixa.get_codigo_estante()]})
+                               'cod_est': [caixa.get_estante().get_codigo()]})
 
             with open(f'data/arquivo/caixa.csv', encoding='utf-8') as fin:
                 if not fin.read():
