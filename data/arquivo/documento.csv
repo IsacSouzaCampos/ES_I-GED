@@ -1,70 +1,55 @@
 protocolo,cod_cx,assunto,partes interessadas,anexos,historico
-26,8,26,26, ,"Insercao: 1-12-2020
+26,8,26,26, ,"Insercao: 8-12-2020
 Localizacao: estante_2-caixa_8"
-25,8,25,25, ,"Insercao: 1-12-2020
+25,8,25,25, ,"Insercao: 8-12-2020
 Localizacao: estante_2-caixa_8"
-24,8,24,24, ,"Insercao: 1-12-2020
+24,8,24,24, ,"Insercao: 8-12-2020
 Localizacao: estante_2-caixa_8"
-23,7,23,23, ,"Insercao: 1-12-2020
+23,7,23,23, ,"Insercao: 8-12-2020
 Localizacao: estante_2-caixa_7"
-22,7,22,22, ,"Insercao: 1-12-2020
+22,7,22,22, ,"Insercao: 8-12-2020
 Localizacao: estante_2-caixa_7"
-21,7,21,21, ,"Insercao: 1-12-2020
+21,7,21,21, ,"Insercao: 8-12-2020
 Localizacao: estante_2-caixa_7"
-19,6,19,19, ,"Insercao: 1-12-2020
+20,6,20,20, ,"Insercao: 8-12-2020
 Localizacao: estante_2-caixa_6"
-18,6,18,18, ,"Insercao: 1-12-2020
+19,6,19,19, ,"Insercao: 8-12-2020
 Localizacao: estante_2-caixa_6"
-17,5,17,17, ,"Insercao: 1-12-2020
+18,6,18,18, ,"Insercao: 8-12-2020
+Localizacao: estante_2-caixa_6"
+17,5,17,17, ,"Insercao: 8-12-2020
 Localizacao: estante_1-caixa_5"
-16,5,16,16, ,"Insercao: 1-12-2020
+16,5,16,16, ,"Insercao: 8-12-2020
 Localizacao: estante_1-caixa_5"
-15,5,15,15, ,"Insercao: 1-12-2020
+15,5,15,15, ,"Insercao: 8-12-2020
 Localizacao: estante_1-caixa_5"
-14,4,14,14, ,"Insercao: 1-12-2020
+14,4,14,14, ,"Insercao: 8-12-2020
 Localizacao: estante_1-caixa_4"
-13,4,13,13, ,"Insercao: 1-12-2020
+13,4,13,13, ,"Insercao: 8-12-2020
 Localizacao: estante_1-caixa_4"
-12,4,12,12, ,"Insercao: 1-12-2020
+12,4,12,12, ,"Insercao: 8-12-2020
 Localizacao: estante_1-caixa_4"
-11,3,11,11, ,"Insercao: 1-12-2020
+11,3,11,11, ,"Insercao: 8-12-2020
 Localizacao: estante_1-caixa_3"
-10,3,10,10, ,"Insercao: 1-12-2020
+10,3,10,10, ,"Insercao: 8-12-2020
 Localizacao: estante_1-caixa_3"
-9,3,9,9, ,"Insercao: 1-12-2020
+9,3,9,9, ,"Insercao: 8-12-2020
 Localizacao: estante_1-caixa_3"
-8,2,8,8, ,"Insercao: 1-12-2020
+8,2,8,8, ,"Insercao: 8-12-2020
 Localizacao: estante_0-caixa_2"
-7,2,7,7, ,"Insercao: 1-12-2020
+7,2,7,7, ,"Insercao: 8-12-2020
 Localizacao: estante_0-caixa_2"
-6,2,6,6, ,"Insercao: 1-12-2020
+6,2,6,6, ,"Insercao: 8-12-2020
 Localizacao: estante_0-caixa_2"
-5,1,5,5, ,"Insercao: 1-12-2020
+5,1,5,5, ,"Insercao: 8-12-2020
 Localizacao: estante_0-caixa_1"
-4,1,4,4, ,"Insercao: 1-12-2020
+4,1,4,4, ,"Insercao: 8-12-2020
 Localizacao: estante_0-caixa_1"
-2,0,2,2, ,"Insercao: 1-12-2020
+3,1,3,3, ,"Insercao: 8-12-2020
+Localizacao: estante_0-caixa_1"
+2,0,2,2, ,"Insercao: 8-12-2020
 Localizacao: estante_0-caixa_0"
-1,0,1,1, ,"Insercao: 1-12-2020
+1,0,1,1, ,"Insercao: 8-12-2020
 Localizacao: estante_0-caixa_0"
-0,0,0,3/0/,/3/,"Insercao: 1-12-2020
-Localizacao: estante_0-caixa_1
-*********
-Data: 1-12-2020
-Localizacao: estante_0-caixa_0
-Motivo: recebeu 3 como anexo
-Usuario: None"
-10,3,10,20/10/,/20/,"Insercao: 1-12-2020
-Localizacao: estante_2-caixa_6
-*********
-Data: 1-12-2020
-Localizacao: estante_1-caixa_3
-Motivo: recebeu 20 como anexo
-Usuario: None"
-25,2,25,25, ,"Insercao: 1-12-2020
-Localizacao: estante_2-caixa_8
-********************
-Data: 1-12-2020
-Localizacao: estante_0-caixa_2
-Motivo: teste
-Usuario: None"
+0,0,0,0, ,"Insercao: 8-12-2020
+Localizacao: estante_0-caixa_0"

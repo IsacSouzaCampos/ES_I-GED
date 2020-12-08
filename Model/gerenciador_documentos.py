@@ -1,16 +1,20 @@
 import pandas as pd
 from datetime import date
+import getpass
+
+from Model import login, administrador
 
 
 class GerenciadorDocumentos:
     def __init__(self, documentos):
         self.documentos = documentos
 
-    def adicionar(self, documento, codigo_estante):
+    def adicionar(self, documento):
         if self.existe_documento(documento):
             raise Exception('O protocolo informado já existe no arquivo!')
 
-        codigo_caixa = documento.get_codigo_caixa()
+        codigo_caixa = documento.get_caixa().get_codigo()
+        codigo_estante = documento.get_caixa().get_estante().get_codigo()
         try:
             data = date.today()
             documento.set_historico(f'Insercao: {data.day}-{data.month}-{data.year}\n'
@@ -22,10 +26,24 @@ class GerenciadorDocumentos:
 
         print('Finalizado')
 
+    def remover(self, documento, usuario):
+        if type(usuario) is not administrador.Administrador:
+            print('Autorização do Administrador:')
+            nome_admin = str(input('Usuario: '))
+            senha_admin = getpass.getpass('Senha: ').encode()
+            if type(login.LogIn().verificar_hierarquia(nome_admin, senha_admin)) is not administrador.Administrador:
+                raise Exception('Informações de administrador incorretas!')
+        self.atualizar_csv_remover(documento)
+        index = self.documentos.index(documento)
+        del (self.documentos[index])
+        print('Documento removido com êxito!')
+
     def anexar(self, d1, d2, codigo_estante_d2, nome_usuario):
         try:
             documento_mais_antigo = self.documento_mais_antigo(d1, d2)
-            if documento_mais_antigo.get_protocolo() == d1.get_protocolo():
+            protocolo_doc_mais_antigo = documento_mais_antigo.get_protocolo()
+            protocolo_d1 = d1.get_protocolo()
+            if protocolo_doc_mais_antigo == protocolo_d1:
                 index = self.documentos.index(d2)
                 del(self.documentos[index])
                 documento_remover = d2
@@ -38,7 +56,7 @@ class GerenciadorDocumentos:
 
             data = date.today()
             data_atual = f'{data.day}-{data.month}-{data.year}'
-            nova_localizacao = f'estante_{codigo_estante_d2}-caixa_{d2.get_codigo_caixa()}'
+            nova_localizacao = f'estante_{codigo_estante_d2}-caixa_{d2.get_caixa().get_codigo()}'
             motivo = f'anexado ao documento "{documento_remover.get_assunto()}"'
 
             historico = d1.get_historico()
@@ -54,7 +72,7 @@ class GerenciadorDocumentos:
                 partes_interessadas += f'{pi}/'
             partes_interessadas = partes_interessadas.replace(' ', '').replace('//', '/')
 
-            documento_alterar.set_codigo_caixa(d2.get_codigo_caixa())
+            documento_alterar.set_caixa(d2.get_caixa())
             documento_alterar.set_partes_interessadas(partes_interessadas)
             documento_alterar.set_historico(historico)
             documento_alterar.set_anexos(anexos)
@@ -105,27 +123,29 @@ class GerenciadorDocumentos:
         lista_documentos = []
 
         for documento in self.documentos:
-            if str(documento.get_codigo_caixa()) == codigo_caixa:
+            if str(documento.get_caixa().get_codigo()) == codigo_caixa:
                 lista_documentos.append(documento)
 
+        if not lista_documentos:
+            raise Exception('Caixa vazia!')
         return lista_documentos
 
-    def tramitar(self, protocolo, codigo_caixa, codigo_estante, motivo, nome_usuario):
+    def tramitar(self, protocolo, caixa, estante, motivo, nome_usuario):
         data = date.today()
         doc = self.pesquisar('protocolo', protocolo)[0]
 
-        doc.set_codigo_caixa(codigo_caixa)
+        doc.set_caixa(caixa)
         historico = doc.get_historico()
         historico += '\n' + '*'*20 + f'\nData: {data.day}-{data.month}-{data.year}' \
-                                     f'\nLocalizacao: estante_{codigo_estante}-caixa_{codigo_caixa}' \
+                                     f'\nLocalizacao: estante_{estante.get_codigo()}-caixa_{caixa.get_codigo()}' \
                                      f'\nMotivo: {motivo}' \
                                      f'\nUsuario: {nome_usuario}'
-        doc.set_codigo_caixa(codigo_caixa)
         doc.set_historico(historico)
         self.atualizar_csv_tramitar(doc)
 
         for documento in self.documentos:
-            if documento.get_protocolo() == protocolo:
+            protocolo_doc = documento.get_protocolo()
+            if protocolo_doc == protocolo:
                 index = self.documentos.index(documento)
                 del(self.documentos[index])
                 self.documentos.append(doc)
@@ -198,6 +218,14 @@ class GerenciadorDocumentos:
         except Exception as e:
             raise Exception(f'Erro ao atualizar banco de dados: {e}')
 
+    @staticmethod
+    def atualizar_csv_remover(documento):
+        df = pd.read_csv('data/arquivo/documento.csv', encoding='utf-8')
+        item = df.loc[df['protocolo'].astype(str) == str(documento.get_protocolo())]
+        df = df.drop(item.index)
+
+        df.to_csv('data/arquivo/documento.csv', index=False, encoding='utf-8')
+
     def atualizar_csv_anexar(self, documento_remover, documento_alterar):
         df = pd.read_csv('data/arquivo/documento.csv', encoding='utf-8')
         item = df.loc[df['protocolo'].astype(str) == str(documento_remover.get_protocolo())]
@@ -206,25 +234,27 @@ class GerenciadorDocumentos:
         df = df.drop(item.index)
 
         df_novo_documento = pd.DataFrame({'protocolo': [documento_alterar.get_protocolo()],
-                                          'cod_cx': [documento_alterar.get_codigo_caixa()],
+                                          'cod_cx': [documento_alterar.get_caixa().get_codigo()],
                                           'assunto': [documento_alterar.get_assunto()],
                                           'partes interessadas': [documento_alterar.get_partes_interessadas()],
                                           'anexos': [documento_alterar.get_anexos()],
                                           'historico': [documento_alterar.get_historico()]})
 
-        pd.concat([df, df_novo_documento]).to_csv('data/arquivo/documento.csv', index=False, encoding='utf-8')
+        df_resultado = pd.concat([df, df_novo_documento])
+        df_resultado.to_csv('data/arquivo/documento.csv', index=False, encoding='utf-8')
 
     @staticmethod
     def atualizar_csv_tramitar(doc):
         df = pd.read_csv('data/arquivo/documento.csv', encoding='utf-8')
-        item = df.loc[df['protocolo'].astype(str) == doc.get_protocolo()]
+        item = df.loc[df['protocolo'].astype(str) == str(doc.get_protocolo())]
         df = df.drop(item.index)
 
         df_novo = pd.DataFrame({'protocolo': [doc.get_protocolo()],
-                                'cod_cx': [doc.get_codigo_caixa()],
+                                'cod_cx': [doc.get_caixa().get_codigo()],
                                 'assunto': [doc.get_assunto()],
                                 'partes interessadas': [doc.get_partes_interessadas()],
                                 'anexos': [doc.get_anexos()],
                                 'historico': [doc.get_historico()]})
 
-        pd.concat([df, df_novo]).to_csv('data/arquivo/documento.csv', index=False, encoding='utf-8')
+        df_resultado = pd.concat([df, df_novo])
+        df_resultado.to_csv('data/arquivo/documento.csv', index=False, encoding='utf-8')

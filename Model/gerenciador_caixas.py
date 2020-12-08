@@ -1,19 +1,17 @@
 import getpass
 import pandas as pd
 
-from Model import administrador, login, caixa as cx
+from Model import administrador, login
 
 
 class GerenciadorCaixas:
     def __init__(self, caixas):
         self.caixas = caixas
 
-    def adicionar(self, codigo, codigo_estante, usuario):
+    def adicionar(self, caixa, usuario):
         try:
-            if self.existe_caixa(codigo):
+            if self.existe_caixa(caixa.get_codigo()):
                 raise Exception('Caixa já existente!')
-
-            caixa = cx.Caixa(codigo, codigo_estante)
 
             if type(usuario) is administrador.Administrador:
                 self.atualizar_csv_adicionar(caixa)
@@ -27,16 +25,49 @@ class GerenciadorCaixas:
                     self.atualizar_csv_adicionar(caixa)
                     self.caixas.append(caixa)
                 else:
-                    raise Exception(f'Erro ao inserir a caixa {codigo} no arquivo!')
+                    raise Exception(f'Erro ao inserir a caixa {caixa.get_codigo()} no arquivo!')
 
         except Exception as e:
             raise e
+
+    def remover(self, caixa, usuario):
+        if self.existe_documento_na_caixa(caixa):
+            raise Exception('A caixa precisa estar vazia para ser removida!')
+        if type(usuario) is not administrador.Administrador:
+            print('Autorização do Administrador:')
+            nome_admin = str(input('Usuario: '))
+            senha_admin = getpass.getpass('Senha: ').encode()
+            if type(login.LogIn().verificar_hierarquia(nome_admin, senha_admin)) is not administrador.Administrador:
+                raise Exception('Informações de administrador incorretas!')
+        self.atualizar_csv_remover(caixa)
+        index = self.caixas.index(caixa)
+        del (self.caixas[index])
+        print('Caixa removida com êxito!')
+
+    @staticmethod
+    def existe_documento_na_caixa(caixa):
+        df = pd.read_csv('data/arquivo/documento.csv', encoding='utf-8')
+        for index, row in df.iterrows():
+            if str(row['cod_cx']) == str(caixa.get_codigo()):
+                return True
+        return False
+
+    def mudar_localizacao_caixa(self, caixa, estante):
+        for _caixa in self.caixas:
+            if _caixa == caixa:
+                temp = caixa
+                index = self.caixas.index(caixa)
+                del(self.caixas[index])
+                temp.set_estante(estante)
+                self.caixas.append(temp)
+                self.atualizar_csv_mudar_localizacao(caixa, estante)
+                break
 
     @staticmethod
     def atualizar_csv_adicionar(caixa):
         try:
             df = pd.DataFrame({'cod': [caixa.get_codigo()],
-                               'cod_est': [caixa.get_codigo_estante()]})
+                               'cod_est': [caixa.get_estante().get_codigo()]})
 
             with open(f'data/arquivo/caixa.csv', encoding='utf-8') as fin:
                 if not fin.read():
@@ -47,6 +78,25 @@ class GerenciadorCaixas:
 
         except Exception as e:
             raise Exception(f'Erro ao atualizar o banco de dados: {e}')
+
+    @staticmethod
+    def atualizar_csv_remover(caixa):
+        df = pd.read_csv('data/arquivo/caixa.csv', encoding='utf-8')
+        item = df.loc[df['cod'].astype(str) == str(caixa.get_codigo())]
+        df = df.drop(item.index)
+
+        df.to_csv('data/arquivo/caixa.csv', index=False, encoding='utf-8')
+
+    @staticmethod
+    def atualizar_csv_mudar_localizacao(caixa, estante):
+        df = pd.read_csv('data/arquivo/caixa.csv', encoding='utf-8')
+        item = df.loc[df['cod'].astype(str) == str(caixa.get_codigo())]
+        df = df.drop(item.index)
+
+        df_novo = pd.DataFrame({'cod': [caixa.get_codigo()],
+                                'cod_est': [estante.get_codigo()]})
+
+        pd.concat([df, df_novo]).to_csv('data/arquivo/caixa.csv', index=False, encoding='utf-8')
 
     def existe_caixa(self, codigo):
         try:
