@@ -1,7 +1,4 @@
-from Model import documento as doc
-
-
-class GerenciadorDocumentos:
+class InterfaceUsuarioDocumentos:
     @staticmethod
     def adicionar():
         print('='*20)

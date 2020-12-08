@@ -3,7 +3,7 @@ import getpass
 from Model import estante, administrador, usuario, login
 
 
-class GerenciadorEstantes:
+class InterfaceUsuarioEstantes:
     def adicionar(self, usuario: usuario.Usuario):
         codigo = str(input('Codigo da estante: '))
         disponibilidade = str(input('Disponibilidade da estante: '))
