@@ -3,6 +3,8 @@ from datetime import date
 import getpass
 
 from Model import login, administrador
+from View import interface_usuario_documentos
+iu_doc = interface_usuario_documentos.InterfaceUsuarioDocumentos()
 
 
 class GerenciadorDocumentos:
@@ -11,7 +13,8 @@ class GerenciadorDocumentos:
 
     def adicionar(self, documento):
         if self.existe_documento(documento):
-            raise Exception('O protocolo informado já existe no arquivo!')
+            # O protocolo informado já existe no arquivo!
+            return 1
 
         codigo_caixa = documento.get_caixa().get_codigo()
         codigo_estante = documento.get_caixa().get_estante().get_codigo()
@@ -24,19 +27,23 @@ class GerenciadorDocumentos:
         except Exception as e:
             raise Exception(e)
 
-        print('Finalizado')
+        # Documento adicionado com êxito!
+        return 0
 
     def remover(self, documento, usuario):
         if type(usuario) is not administrador.Administrador:
-            print('Autorização do Administrador:')
-            nome_admin = str(input('Usuario: '))
-            senha_admin = getpass.getpass('Senha: ').encode()
-            if type(login.LogIn().verificar_hierarquia(nome_admin, senha_admin)) is not administrador.Administrador:
-                raise Exception('Informações de administrador incorretas!')
+            nome_admin, senha_admin = iu_doc.pedir_dados_administrador()
+            admin = login.LogIn().verificar_hierarquia(nome_admin, senha_admin)
+            if type(admin) is not administrador.Administrador:
+                # Informações de administrador incorretas!
+                return 1
+
         self.atualizar_csv_remover(documento)
         index = self.documentos.index(documento)
         del (self.documentos[index])
-        print('Documento removido com êxito!')
+
+        # Documento removido com êxito!
+        return 0
 
     def anexar(self, d1, d2, codigo_estante_d2, nome_usuario):
         try:
@@ -81,6 +88,9 @@ class GerenciadorDocumentos:
 
         except Exception as e:
             raise e
+
+        # Anexação finalizada com êxito!
+        return 0
 
     def pesquisar(self, forma_pesquisa, dado_pesquisado):
         lista_documentos = []
@@ -151,6 +161,9 @@ class GerenciadorDocumentos:
                 self.documentos.append(doc)
                 break
 
+        # Tramitação feita com êxito!
+        return 0
+
     def existe_documento(self, documento):
         try:
             self.pesquisar('protocolo', documento.get_protocolo())
@@ -208,7 +221,6 @@ class GerenciadorDocumentos:
                                'historico': [documento.get_historico()]})
 
             with open(f'data/arquivo/documento.csv') as fin:
-                print(f'estante {codigo_estante}\ncaixa {codigo_caixa}')
                 if not fin.read():
                     df.to_csv(f'data/arquivo/documento.csv', index=False, encoding='utf-8')
                 else:

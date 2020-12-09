@@ -25,6 +25,7 @@ class Arquivo:
                     cod = row['cod']
                     disponibilidade = row['disponibilidade']
                     estantes.append(self.carregar_estante(str(cod), int(disponibilidade)))
+
                 elif table == 'caixa':
                     cod_est = row['cod_est'].astype(str)
                     for estante in estantes:

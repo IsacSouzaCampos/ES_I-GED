@@ -7,18 +7,6 @@ class Documento:
         self.historico = historico
         self.anexos = anexos
 
-    def imprimir(self, codigo_estante=None):
-        print('*'*20)
-        print(f'Estante: {codigo_estante}  -   '
-              f'Caixa: {self.get_caixa().get_codigo()}')
-        print('*' * 20)
-        print(f'assunto: {self.get_assunto()}')
-        print(f'partes interessadas: {self.get_partes_interessadas()}')
-        print(f'protocolo: {self.get_protocolo()}')
-        print(f'anexos: {self.get_anexos()}')
-        print(f'historico: {self.get_historico()}')
-        print('*' * 20)
-
     def get_caixa(self):
         return self.caixa
 
