@@ -1,3 +1,6 @@
+import getpass
+
+
 class InterfaceUsuarioDocumentos:
     @staticmethod
     def adicionar():
@@ -19,8 +22,22 @@ class InterfaceUsuarioDocumentos:
         return protocolo, codigo_caixa, assunto, partes_interessadas, ''
 
     @staticmethod
+    def msg_saida_adicionar(cod_msg):
+        if cod_msg == 0:
+            print('Documento adicionado com êxito!')
+        elif cod_msg == 1:
+            print('O protocolo informado já existe no arquivo!')
+
+    @staticmethod
     def remover():
         return str(input('Protocolo: '))
+
+    @staticmethod
+    def msg_saida_remover(cod_msg):
+        if cod_msg == 0:
+            print('Documento removido com êxito!')
+        elif cod_msg == 1:
+            print('Informações de administrador incorretas!')
 
     @staticmethod
     def anexar():
@@ -29,6 +46,11 @@ class InterfaceUsuarioDocumentos:
         protocolo2 = str(input('protocolo do documento 2: '))
 
         return protocolo1, protocolo2
+
+    @staticmethod
+    def msg_saida_anexar(cod_msg):
+        if cod_msg == 0:
+            print('Anexação feita com êxito!')
 
     @staticmethod
     def listar_documentos_caixa():
@@ -62,9 +84,35 @@ class InterfaceUsuarioDocumentos:
             raise Exception('Opcao nao existente')
 
     @staticmethod
+    def imprimir_documento(documento, codigo_estante=None):
+        print('*'*20)
+        print(f'Estante: {codigo_estante}  -   '
+              f'Caixa: {documento.get_caixa().get_codigo()}')
+        print('*' * 20)
+        print(f'assunto: {documento.get_assunto()}')
+        print(f'partes interessadas: {documento.get_partes_interessadas()}')
+        print(f'protocolo: {documento.get_protocolo()}')
+        print(f'anexos: {documento.get_anexos()}')
+        print(f'historico: {documento.get_historico()}')
+        print('*' * 20)
+
+    @staticmethod
     def tramitar():
         print('*' * 20)
         protocolo = str(input('Protocolo do documento: '))
         codigo_caixa = str(input('Codigo da caixa destino: '))
         motivo = str(input('Motivo da tramitacao: '))
         return protocolo, codigo_caixa, motivo
+
+    @staticmethod
+    def msg_saida_tramitar(cod_msg):
+        if cod_msg == 0:
+            print('Tramitação feita com êxito!')
+
+    @staticmethod
+    def pedir_dados_administrador():
+        print('Autorização do Administrador:')
+        nome_admin = str(input('Usuario: '))
+        senha_admin = getpass.getpass('Senha: ').encode()
+
+        return nome_admin, senha_admin

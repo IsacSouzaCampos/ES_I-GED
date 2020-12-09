@@ -1,7 +1,8 @@
-import getpass
 import pandas as pd
 
 from Model import administrador, login
+from View import interface_usuario_caixas
+iu_cx = interface_usuario_caixas.InterfaceUsuarioCaixas()
 
 
 class GerenciadorCaixas:
@@ -11,38 +12,47 @@ class GerenciadorCaixas:
     def adicionar(self, caixa, usuario):
         try:
             if self.existe_caixa(caixa.get_codigo()):
-                raise Exception('Caixa já existente!')
+                # Caixa já existente!
+                return 1
 
             if type(usuario) is administrador.Administrador:
                 self.atualizar_csv_adicionar(caixa)
                 self.caixas.append(caixa)
             else:
-                nome_admin = str(input('Autorizacao do administrador:\nUsuario: '))
-                senha_admin = getpass.getpass('Senha: ').encode()
+                nome_admin, senha_admin = iu_cx.pedir_dados_administrador()
 
                 admin = login.LogIn().verificar_hierarquia(nome_admin, senha_admin)
                 if type(admin) is administrador.Administrador:
                     self.atualizar_csv_adicionar(caixa)
                     self.caixas.append(caixa)
                 else:
-                    raise Exception(f'Erro ao inserir a caixa {caixa.get_codigo()} no arquivo!')
+                    # Informações de administrador incorretas!
+                    return 2
 
         except Exception as e:
             raise e
 
+        # Caixa adicionada com êxito!
+        return 0
+
     def remover(self, caixa, usuario):
         if self.existe_documento_na_caixa(caixa):
-            raise Exception('A caixa precisa estar vazia para ser removida!')
+            # A caixa precisa estar vazia para ser removida!
+            return 1
+
         if type(usuario) is not administrador.Administrador:
-            print('Autorização do Administrador:')
-            nome_admin = str(input('Usuario: '))
-            senha_admin = getpass.getpass('Senha: ').encode()
-            if type(login.LogIn().verificar_hierarquia(nome_admin, senha_admin)) is not administrador.Administrador:
-                raise Exception('Informações de administrador incorretas!')
+            nome_admin, senha_admin = iu_cx.pedir_dados_administrador()
+            admin = login.LogIn().verificar_hierarquia(nome_admin, senha_admin)
+            if type(admin) is not administrador.Administrador:
+                # Informações de administrador incorretas!
+                return 2
+
         self.atualizar_csv_remover(caixa)
         index = self.caixas.index(caixa)
         del (self.caixas[index])
-        print('Caixa removida com êxito!')
+
+        # Caixa removida com êxito!
+        return 0
 
     @staticmethod
     def existe_documento_na_caixa(caixa):
@@ -62,6 +72,9 @@ class GerenciadorCaixas:
                 self.caixas.append(temp)
                 self.atualizar_csv_mudar_localizacao(caixa, estante)
                 break
+
+        # Localização da caixa modificada com êxito!
+        return 0
 
     @staticmethod
     def atualizar_csv_adicionar(caixa):

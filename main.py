@@ -3,7 +3,13 @@ from Model import arquivo as arq, administrador, estante as est, caixa as cx, do
 
 import os
 
-os.system('rm data/arquivo/*.csv')
+dir_atual = os.getcwd()
+try:
+    os.remove(f'{dir_atual}/data/arquivo/estante.csv')
+    os.remove(f'{dir_atual}/data/arquivo/caixa.csv')
+    os.remove(f'{dir_atual}/data/arquivo/documento.csv')
+except Exception as e:
+    print(e)
 
 usuario = administrador.Administrador()
 ger_est, ger_cx, ger_doc = arq.Arquivo().carregar_arquivo()
@@ -73,13 +79,17 @@ def mostrar_interface() -> int:
 def adicionar_estante():
     codigo, disponibilidade = iu_est.adicionar(usuario)
     estante = est.Estante(codigo, disponibilidade)
-    ger_est.adicionar(estante)
+    cod_msg = ger_est.adicionar(estante)
+
+    iu_est.msg_saida_adicionar(cod_msg)
 
 
 def remover_estante():
     codigo = iu_est.remover()
     estante = ger_est.get_estante(codigo)
-    ger_est.remover(estante, usuario)
+    cod_msg = ger_est.remover(estante, usuario)
+
+    iu_est.msg_saida_remover(cod_msg)
 
 
 def adicionar_caixa():
@@ -88,23 +98,29 @@ def adicionar_caixa():
         estante = ger_est.get_estante(codigo_estante)
         if int(estante.get_disponibilidade()) > 0:
             caixa = cx.Caixa(codigo, estante)
-            ger_cx.adicionar(caixa, usuario)
+            cod_msg = ger_cx.adicionar(caixa, usuario)
             disponibilidade = ger_est.get_estante(codigo_estante).get_disponibilidade() - 1
             ger_est.atualizar_csv_disponibilidade(codigo_estante, disponibilidade)
         else:
-            print('Estante indisponivel no momento!')
+            # Estante indisponivel no momento!
+            cod_msg = 3
     else:
-        print('Estante nao encontrada!')
+        # Estante nao encontrada!
+        cod_msg = 4
+
+    iu_cx.msg_saida_adicionar(cod_msg)
 
 
 def remover_caixa():
     codigo = iu_cx.remover()
     caixa = ger_cx.get_caixa(codigo)
-    ger_cx.remover(caixa, usuario)
+    cod_msg = ger_cx.remover(caixa, usuario)
     estante = caixa.get_estante()
     codigo_estante = estante.get_codigo()
     disponibilidade = estante.get_disponibilidade() + 1
     ger_est.atualizar_csv_disponibilidade(codigo_estante, disponibilidade)
+
+    iu_cx.msg_saida_remover(cod_msg)
 
 
 def mudar_localizacao_caixa():
@@ -116,7 +132,7 @@ def mudar_localizacao_caixa():
     estante_anterior = caixa.get_estante()
     cod_estante_anterior = estante_anterior.get_codigo()
 
-    ger_cx.mudar_localizacao_caixa(caixa, proxima_estante)
+    cod_msg = ger_cx.mudar_localizacao_caixa(caixa, proxima_estante)
 
     disponibilidade_estante_anterior = estante_anterior.get_disponibilidade() + 1
     disponibilidade_proxima_estante = proxima_estante.get_disponibilidade() - 1
@@ -124,18 +140,24 @@ def mudar_localizacao_caixa():
     ger_est.atualizar_csv_disponibilidade(cod_estante_anterior, disponibilidade_estante_anterior)
     ger_est.atualizar_csv_disponibilidade(cod_proxima_estante, disponibilidade_proxima_estante)
 
+    iu_cx.msg_saida_mudar_localizacao(cod_msg)
+
 
 def adicionar_documento():
     protocolo, codigo_caixa, assunto, partes_interessadas, historico = iu_doc.adicionar()
     caixa = ger_cx.get_caixa(codigo_caixa)
     documento = doc.Documento(protocolo, caixa, assunto, partes_interessadas, historico)
-    ger_doc.adicionar(documento)
+    cod_msg = ger_doc.adicionar(documento)
+
+    iu_doc.msg_saida_adicionar(cod_msg)
 
 
 def remover_documento():
     protocolo = iu_doc.remover()
     documento = ger_doc.pesquisar('protocolo', protocolo)[0]
-    ger_doc.remover(documento, usuario)
+    cod_msg = ger_doc.remover(documento, usuario)
+
+    iu_doc.msg_saida_remover(cod_msg)
 
 
 def anexar_documentos():
@@ -146,7 +168,9 @@ def anexar_documentos():
     caixa_d2 = ger_cx.get_caixa(codigo_caixa_d2)
     codigo_estante_d2 = caixa_d2.get_estante().get_codigo()
     nome_usuario = usuario.get_nome()
-    ger_doc.anexar(documento1, documento2, codigo_estante_d2, nome_usuario)
+    cod_msg = ger_doc.anexar(documento1, documento2, codigo_estante_d2, nome_usuario)
+
+    iu_doc.msg_saida_anexar(cod_msg)
 
 
 def listar_documentos_caixa():
@@ -159,7 +183,7 @@ def listar_documentos_caixa():
     for documento in documentos:
         caixa = ger_cx.get_caixa(documento.get_caixa().get_codigo())
         codigo_estante = caixa.get_estante().get_codigo()
-        documento.imprimir(codigo_estante)
+        iu_doc.imprimir_documento(documento, codigo_estante)
 
 
 def pesquisar_documento():
@@ -167,7 +191,7 @@ def pesquisar_documento():
     documentos = ger_doc.pesquisar(forma_pesquisa, dado_pesquisado)
     for documento in documentos:
         codigo_estante = documento.get_caixa().get_estante().get_codigo()
-        documento.imprimir(codigo_estante)
+        iu_doc.imprimir_documento(documento, codigo_estante)
 
 
 def tramitar():
@@ -175,7 +199,9 @@ def tramitar():
     caixa = ger_cx.get_caixa(codigo_caixa)
     estante = caixa.get_estante()
     nome_usuario = usuario.get_nome()
-    ger_doc.tramitar(protocolo, caixa, estante, motivo, nome_usuario)
+    cod_msg = ger_doc.tramitar(protocolo, caixa, estante, motivo, nome_usuario)
+
+    iu_doc.msg_saida_tramitar(cod_msg)
 
 
 if __name__ == '__main__':

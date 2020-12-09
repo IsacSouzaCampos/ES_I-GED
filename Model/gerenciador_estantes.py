@@ -2,6 +2,8 @@ import pandas as pd
 import getpass
 
 from Model import administrador, login
+from View import interface_usuario_estantes
+iu_est = interface_usuario_estantes.InterfaceUsuarioEstantes()
 
 
 class GerenciadorEstantes:
@@ -14,23 +16,33 @@ class GerenciadorEstantes:
                 self.atualizar_csv_adicionar(estante)
                 self.estantes.append(estante)
             else:
-                raise Exception('Estante ja existente!')
+                # Estante já existente!
+                return 1
+
         except Exception as e:
             raise e
 
+        # Estante adicionada com êxito!
+        return 0
+
     def remover(self, estante, usuario):
         if self.existe_caixa_na_estante(estante):
-            raise Exception('A estante precisa estar vazia para ser removida!')
+            # A estante precisa estar vazia para ser removida!
+            return 1
+
         if type(usuario) is not administrador.Administrador:
-            print('Autorização do Administrador:')
-            nome_admin = str(input('Usuario: '))
-            senha_admin = getpass.getpass('Senha: ').encode()
-            if type(login.LogIn().verificar_hierarquia(nome_admin, senha_admin)) is not administrador.Administrador:
-                raise Exception('Informações de administrador incorretas!')
+            nome_admin, senha_admin = iu_est.pedir_dados_administrador()
+            admin = login.LogIn().verificar_hierarquia(nome_admin, senha_admin)
+            if type(admin) is not administrador.Administrador:
+                # Informações de administrador incorretas!
+                return 2
+
         self.atualizar_csv_remover(estante)
         index = self.estantes.index(estante)
         del (self.estantes[index])
-        print('Estante removida com êxito!')
+
+        # Estante removida com êxito!
+        return 0
 
     @staticmethod
     def existe_caixa_na_estante(estante):
