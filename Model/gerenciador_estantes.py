@@ -1,8 +1,11 @@
 import pandas as pd
 import getpass
+import mysql.connector
+from mysql.connector import Error
 
 from Model import administrador, login
 from View import interface_usuario_estantes
+from Model import estante as est
 iu_est = interface_usuario_estantes.InterfaceUsuarioEstantes()
 
 
@@ -13,7 +16,8 @@ class GerenciadorEstantes:
     def adicionar(self, estante):
         try:
             if not self.existe_estante(estante.get_codigo()):
-                self.atualizar_csv_adicionar(estante)
+                self.atualizar_sql_adicionar(estante)
+                #self.atualizar_csv_adicionar(estante)
                 self.estantes.append(estante)
             else:
                 # Estante já existente!
@@ -90,6 +94,24 @@ class GerenciadorEstantes:
             raise Exception(f'Erro ao atualizar o banco de dados: {e}')
 
     @staticmethod
+    def atualizar_sql_adicionar(estante):
+        try:
+            con = mysql.connector.connect(host='localhost', database='ens', user='root', password='')
+            if con.is_connected():
+                cursor = con.cursor()
+                insert_stmt = (
+                    "INSERT INTO estante (codigo_estante, disponibilidade) "
+                    "VALUES (%s, %s)"
+                )
+                data = (estante.get_codigo(), estante.get_disponibilidade())
+                cursor.execute(insert_stmt, data)
+                con.commit()
+                cursor.close()
+                con.close()
+        except Exception as e:
+            raise Exception(f'Erro ao atualizar o banco de dados: {e}')
+
+    @staticmethod
     def atualizar_csv_remover(estante):
         df = pd.read_csv('data/arquivo/estante.csv', encoding='utf-8')
         item = df.loc[df['cod'].astype(str) == str(estante.get_codigo())]
@@ -98,7 +120,13 @@ class GerenciadorEstantes:
         df.to_csv('data/arquivo/estante.csv', index=False, encoding='utf-8')
 
     def get_estante(self, codigo):
-        for estante in self.estantes:
-            if str(codigo) == str(estante.get_codigo()):
+        try:
+            con = mysql.connector.connect(host='localhost', database='ens', user='root', password='')
+            if con.is_connected():
+                cursor = con.cursor()
+                cursor.execute('SELECT * FROM estante WHERE codigo_estante = %(codigo_est)s', {'codigo_est': int(codigo)})
+                linha = cursor.fetchone()
+                estante = est.Estante(linha[0], linha[1])
                 return estante
-        raise Exception('Estante não encontrada!')
+        except Exception as e:
+            raise Exception(f'Erro ao atualizar o banco de dados: {e}')

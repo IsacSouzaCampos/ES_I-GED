@@ -1,10 +1,11 @@
 import pandas as pd
-
+import mysql.connector
 from Model import administrador, login
+from Model import caixa as cx
+from Model import gerenciador_estantes as gere
+from Model import estante as est
 from View import interface_usuario_caixas
 iu_cx = interface_usuario_caixas.InterfaceUsuarioCaixas()
-
-
 class GerenciadorCaixas:
     def __init__(self, caixas):
         self.caixas = caixas
@@ -16,14 +17,16 @@ class GerenciadorCaixas:
                 return 1
 
             if type(usuario) is administrador.Administrador:
-                self.atualizar_csv_adicionar(caixa)
+                #self.atualizar_csv_adicionar(caixa)
+                self.atualizar_sql_adicionar(caixa)
                 self.caixas.append(caixa)
             else:
                 nome_admin, senha_admin = iu_cx.pedir_dados_administrador()
 
                 admin = login.LogIn().verificar_hierarquia(nome_admin, senha_admin)
                 if type(admin) is administrador.Administrador:
-                    self.atualizar_csv_adicionar(caixa)
+                    #self.atualizar_csv_adicionar(caixa)
+                    self.atualizar_sql_adicionar(caixa)
                     self.caixas.append(caixa)
                 else:
                     # Informações de administrador incorretas!
@@ -93,6 +96,24 @@ class GerenciadorCaixas:
             raise Exception(f'Erro ao atualizar o banco de dados: {e}')
 
     @staticmethod
+    def atualizar_sql_adicionar(caixa):
+        try:
+            con = mysql.connector.connect(host='localhost', database='ens', user='root', password='')
+            if con.is_connected():
+                cursor = con.cursor()
+                insert_stmt = (
+                    "INSERT INTO caixa (codigo_caixa, codigo_estante) "
+                    "VALUES (%s, %s)"
+                )
+                data = (caixa.get_codigo(), caixa.get_estante().get_codigo())
+                cursor.execute(insert_stmt, data)
+                con.commit()
+                cursor.close()
+                con.close()
+        except Exception as e:
+            raise Exception(f'Erro ao atualizar o banco de dados: {e}')
+
+    @staticmethod
     def atualizar_csv_remover(caixa):
         df = pd.read_csv('data/arquivo/caixa.csv', encoding='utf-8')
         item = df.loc[df['cod'].astype(str) == str(caixa.get_codigo())]
@@ -119,7 +140,14 @@ class GerenciadorCaixas:
             return False
 
     def get_caixa(self, codigo):
-        for caixa in self.caixas:
-            if str(codigo) == str(caixa.get_codigo()):
+        try:
+            con = mysql.connector.connect(host='localhost', database='ens', user='root', password='')
+            if con.is_connected():
+                cursor = con.cursor()
+                cursor.execute('SELECT * FROM caixa WHERE codigo_caixa = %(codigo_cx)s', {'codigo_cx': int(codigo)})
+                linha = cursor.fetchone()
+                estante = est.Estante(linha[1], 10)
+                caixa = cx.Caixa(linha[0], estante)
                 return caixa
-        raise Exception('Caixa não encontrada!')
+        except Exception as e:
+            raise Exception(f'Erro ao atualizar o banco de dados: {e}')

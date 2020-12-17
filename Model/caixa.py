@@ -2,7 +2,7 @@ import os
 
 
 class Caixa:
-    def __init__(self, codigo, estante=None):
+    def __init__(self, codigo, estante):
         self.codigo = codigo
         self.estante = estante
 

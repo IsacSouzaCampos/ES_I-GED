@@ -1,5 +1,5 @@
 from View import login, interface_usuario_caixas, interface_usuario_documentos, interface_usuario_estantes
-from Model import arquivo as arq, administrador, estante as est, caixa as cx, documento as doc
+from Model import arquivo as arq, administrador, estante as est, caixa as cx, documento as doc, mysqlConnector as banco
 
 import os
 
@@ -17,15 +17,15 @@ iu_est = interface_usuario_estantes.InterfaceUsuarioEstantes()
 iu_cx = interface_usuario_caixas.InterfaceUsuarioCaixas()
 iu_doc = interface_usuario_documentos.InterfaceUsuarioDocumentos()
 
-for i in range(3):
-    estante = est.Estante(str(i), 15)
-    ger_est.adicionar(estante)
-    for j in range(3):
-        caixa = cx.Caixa(str(j + (i * 3)), estante)
-        ger_cx.adicionar(caixa, usuario)
-        for k in range(3):
-            s = str(k + ((j + (i * 3)) * 3))
-            ger_doc.adicionar(doc.Documento(s, caixa, s, s, '', ''))
+#for i in range(3):
+#    estante = est.Estante(str(i), 15)
+#    ger_est.adicionar(estante)
+#    for j in range(3):
+#        caixa = cx.Caixa(str(j + (i * 3)), estante)
+#        ger_cx.adicionar(caixa, usuario)
+#        for k in range(3):
+#            s = str(k + ((j + (i * 3)) * 3))
+#            ger_doc.adicionar(doc.Documento(s, caixa, s, s, '', ''))
 
 
 def main():

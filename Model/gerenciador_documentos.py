@@ -1,7 +1,7 @@
 import pandas as pd
 from datetime import date
 import getpass
-
+import mysql.connector
 from Model import login, administrador
 from View import interface_usuario_documentos
 iu_doc = interface_usuario_documentos.InterfaceUsuarioDocumentos()
@@ -22,7 +22,8 @@ class GerenciadorDocumentos:
             data = date.today()
             documento.set_historico(f'Insercao: {data.day}-{data.month}-{data.year}\n'
                                                f'Localizacao: estante_{codigo_estante}-caixa_{codigo_caixa}')
-            self.atualizar_csv_adicionar(documento, codigo_estante, codigo_caixa)
+            #self.atualizar_csv_adicionar(documento, codigo_estante, codigo_caixa)
+            self.atualizar_sql_adicionar(documento, codigo_caixa)
             self.documentos.append(documento)
         except Exception as e:
             raise Exception(e)
@@ -229,6 +230,25 @@ class GerenciadorDocumentos:
 
         except Exception as e:
             raise Exception(f'Erro ao atualizar banco de dados: {e}')
+
+    @staticmethod
+    def atualizar_sql_adicionar(documento, codigo_caixa):
+        try:
+            con = mysql.connector.connect(host='localhost', database='ens', user='root', password='')
+            if con.is_connected():
+                cursor = con.cursor()
+                insert_stmt = (
+                    "INSERT INTO documento (protocolo, codigo_caixa, Assunto, partes_interessadas, historico) "
+                    "VALUES (%s, %s, %s, %s, %s)"
+                )
+                data = (documento.get_protocolo(), codigo_caixa, documento.get_assunto(), documento.get_partes_interessadas(), documento.get_historico())
+                cursor.execute(insert_stmt, data)
+                con.commit()
+
+                cursor.close()
+                con.close()
+        except Exception as e:
+            raise Exception(f'Erro ao atualizar o banco de dados: {e}')
 
     @staticmethod
     def atualizar_csv_remover(documento):

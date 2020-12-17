@@ -20,15 +20,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2ebf7468-2029-498b-807a-beeb04c82052" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Model/mysqlConnector.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_13_10_2020_12_25__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_13_10_2020_12_25__Default_Changelist_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/arquivo.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/arquivo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/documento.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/documento.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/caixa.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/caixa.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Model/gerenciador_caixas.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/gerenciador_caixas.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Model/gerenciador_documentos.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/gerenciador_documentos.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Model/gerenciador_estantes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/gerenciador_estantes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/interface_usuario_caixas.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/interface_usuario_caixas.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/interface_usuario_documentos.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/interface_usuario_documentos.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/interface_usuario_estantes.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/interface_usuario_estantes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/arquivo/caixa.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/arquivo/caixa.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/arquivo/documento.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/arquivo/documento.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/arquivo/estante.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/arquivo/estante.csv" afterDir="false" />
@@ -138,5 +136,23 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1515" height="160" key="GridCell.Tab.0.bottom" timestamp="1607807535456">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1515" height="160" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1607807535456" />
+    <state width="1515" height="160" key="GridCell.Tab.0.center" timestamp="1607807535456">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1515" height="160" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1607807535456" />
+    <state width="1515" height="160" key="GridCell.Tab.0.left" timestamp="1607807535456">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1515" height="160" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1607807535456" />
+    <state width="1515" height="160" key="GridCell.Tab.0.right" timestamp="1607807535456">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1515" height="160" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1607807535456" />
   </component>
 </project>
